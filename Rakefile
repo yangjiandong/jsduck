@@ -4,6 +4,13 @@ require 'json'
 
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 
+require 'rake/extensiontask'
+Rake::ExtensionTask.new do |ext|
+  ext.name = 'c_tokenizer'
+  ext.ext_dir = 'ext/jsduck'
+  ext.lib_dir = 'lib/jsduck'
+end
+
 require 'rspec'
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec) do |spec|

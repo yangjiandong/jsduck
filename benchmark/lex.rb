@@ -6,6 +6,9 @@ $:.unshift File.dirname(File.dirname(__FILE__)) + "/lib"
 require 'jsduck/lexer'
 
 ARGV.each do |fname|
-  JsDuck::Lexer.new(IO.read(fname))
+  lex = JsDuck::Lexer.new(IO.read(fname))
+  while !lex.empty?
+    lex.next
+  end
 end
 
