@@ -42,8 +42,6 @@ describe JsDuck::CTokenizer do
     lex(" // foo  ").should == []
   end
 
-  # ---
-
   it "tokenizes simple expression" do
     lex("var foo = 8;").should == [
       [:var, :var],
@@ -62,50 +60,58 @@ describe JsDuck::CTokenizer do
     lex("x2").should == [[:ident, "x2"]]
   end
 
-  # describe "differenciates regex from division" do
+  describe "differenciates regex from division" do
 
-  #   it "when regex after operator" do
-  #     lex("x = /  /; y / 2").should == [
-  #       [:ident, "x"],
-  #       [:operator, "="],
-  #       [:regex, "/  /"],
-  #       [:operator, ";"],
-  #       [:ident, "y"],
-  #       [:operator, "/"],
-  #       [:number, "2"]
-  #     ]
-  #   end
+    it "when regex after operator" do
+      lex("x = /  /; y / 2").should == [
+        [:ident, "x"],
+        [:operator, "="],
+        [:regex, "/  /"],
+        [:operator, ";"],
+        [:ident, "y"],
+        [:operator, "/"],
+        [:number, "2"]
+      ]
+    end
 
-  #   it "when regex after return" do
-  #     lex("return /foo/.test;").should == [
-  #       [:return, :return],
-  #       [:regex, "/foo/"],
-  #       [:operator, "."],
-  #       [:ident, "test"],
-  #       [:operator, ";"]
-  #     ]
-  #   end
+    it "when regex after return" do
+      lex("return /foo/.test;").should == [
+        [:return, :return],
+        [:regex, "/foo/"],
+        [:operator, "."],
+        [:ident, "test"],
+        [:operator, ";"]
+      ]
+    end
 
-  #   it "when regex after typeof" do
-  #     lex("typeof /foo/;").should == [
-  #       [:typeof, :typeof],
-  #       [:regex, "/foo/"],
-  #       [:operator, ";"]
-  #     ]
-  #   end
+    it "when regex after typeof" do
+      lex("typeof /foo/;").should == [
+        [:typeof, :typeof],
+        [:regex, "/foo/"],
+        [:operator, ";"]
+      ]
+    end
 
-  #   it "when division after this" do
-  #     lex("this / 3").should == [
-  #       [:this, :this],
-  #       [:operator, "/"],
-  #       [:number, "3"]
-  #     ]
-  #   end
-  # end
+    it "when division after this" do
+      lex("this / 3").should == [
+        [:this, :this],
+        [:operator, "/"],
+        [:number, "3"]
+      ]
+    end
+  end
 
-  # it "allows [/] inside regex" do
-  #   lex("/ [/] /").should == [[:regex, "/ [/] /"]]
-  # end
+  it "allows escaping inside regex" do
+    lex("/ \\/ /").should == [[:regex, "/ \\/ /"]]
+  end
+
+  it "allows [/] inside regex" do
+    lex("/ [/] /").should == [[:regex, "/ [/] /"]]
+  end
+
+  it "allows escaping inside regex [...]" do
+    lex("/ [\\]..] /").should == [[:regex, "/ [\\]..] /"]]
+  end
 
   describe "identifies strings" do
 
@@ -193,9 +199,9 @@ describe JsDuck::CTokenizer do
     #   lex("/** ").should == [[:doc_comment, "/** ", 1]]
     # end
 
-    # it "regex" do
-    #   lex("/[a-z] ").should == [[:regex, "/[a-z] "]]
-    # end
+    it "regex" do
+      lex("/[a-z] ").should == [[:regex, "/[a-z] "]]
+    end
 
     it "single-quoted string" do
       lex("' ").should == [[:string, " "]]

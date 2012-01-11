@@ -7,6 +7,7 @@ VALUE SYM_IDENT;
 VALUE SYM_STRING;
 VALUE SYM_NUMBER;
 VALUE SYM_OPERATOR;
+VALUE SYM_REGEX;
 VALUE SYM_DOC_COMMENT;
 
 // Creates Ruby Hash: { :type => <type>, :value => <value> }
@@ -82,14 +83,46 @@ int line_comment_length(char* input, int start) {
     return i - start + (c ? 1 : 0);
 }
 
+// Returns the length of JavaScript regex starting at position `start`.
+int regex_length(char* input, int start) {
+    int i = start + 1; // skip initial known char
+    int c = input[i];
+    // scan until '/'
+    while (c && c != '/') {
+        // skip any escaped char
+        if (c == '\\') ++i;
+        // handle [...] block
+        if (c == '[') {
+            c = input[++i];
+            while (c && c != ']') {
+                // skip any escaped char
+                if (c == '\\') ++i;
+                c = input[++i];
+            }
+        }
+        c = input[++i];
+    }
+    // on normal case scan modifiers
+    if (c == '/') {
+        i++;
+        while (c == 'g' || c == 'i' || c == 'm') {
+            c = input[++i];
+        }
+    }
+    return i - start;
+}
+
 VALUE tokenize(VALUE self, VALUE js) {
     char* input = RSTRING_PTR(js);
     VALUE tokens = rb_ary_new();
 
     // access keywords Hash
     VALUE keywords_map = rb_const_get(self, rb_intern("KEYWORDS_MAP"));
+    VALUE keyword_this = rb_hash_aref(keywords_map, rb_str_new2("this"));
     // used for storing lengths of tokens
     int len;
+    // true when next token can be regex
+    int regex_possible = 1;
 
     int i = 0;
     char c = input[i];
@@ -102,9 +135,11 @@ VALUE tokenize(VALUE self, VALUE js) {
             VALUE kw = rb_hash_aref(keywords_map, str);
             if (kw == Qnil) {
                 rb_ary_push(tokens, make_token(SYM_IDENT, str));
+                regex_possible = 0;
             }
             else {
                 rb_ary_push(tokens, make_token(kw, kw));
+                regex_possible = (kw != keyword_this);
             }
             i += len - 1;
         }
@@ -112,13 +147,16 @@ VALUE tokenize(VALUE self, VALUE js) {
             // add number token
             len = number_length(input, i);
             rb_ary_push(tokens, make_token(SYM_NUMBER, rb_str_new(input+i, len)));
+            regex_possible = 0;
             i += len - 1;
         }
         else if (c == '"' || c == '\'') {
             // add string token (exclude quotes from :value)
             len = string_length(input, i);
-            int adjust = (input[i+len-1] == '"' || input[i+len-1] == '\'') ? 2 : 1;
+            int last_c = input[i+len-1];
+            int adjust = (last_c == '"' || last_c == '\'') ? 2 : 1;
             rb_ary_push(tokens, make_token(SYM_STRING, rb_str_new(input+i+1, len-adjust)));
+            regex_possible = 1;
             i += len - 1;
         }
         else if (c == '/') {
@@ -141,8 +179,17 @@ VALUE tokenize(VALUE self, VALUE js) {
                 // line comment
                 i += line_comment_length(input, i) - 1;
             }
+            else if (regex_possible) {
+                // add regex token
+                len = regex_length(input, i);
+                rb_ary_push(tokens, make_token(SYM_REGEX, rb_str_new(input+i, len)));
+                regex_possible = 1;
+                i += len - 1;
+            }
             else {
-                // regex or division
+                // division op
+                rb_ary_push(tokens, make_token(SYM_OPERATOR, rb_str_new(&c, 1)));
+                regex_possible = 1;
             }
         }
         else if (c == ' ' || c == '\n' || c == '\r' || c == '\t') {
@@ -151,6 +198,7 @@ VALUE tokenize(VALUE self, VALUE js) {
         else {
             // add operator token
             rb_ary_push(tokens, make_token(SYM_OPERATOR, rb_str_new(&c, 1)));
+            regex_possible = (c != ')' && c != ']');
         }
 
         // move to next char
@@ -169,6 +217,7 @@ void Init_c_tokenizer() {
 	SYM_STRING = ID2SYM(rb_intern("string"));
 	SYM_NUMBER = ID2SYM(rb_intern("number"));
 	SYM_OPERATOR = ID2SYM(rb_intern("operator"));
+	SYM_REGEX = ID2SYM(rb_intern("regex"));
 	SYM_DOC_COMMENT = ID2SYM(rb_intern("doc_comment"));
 
 	VALUE JsDuck = rb_define_module("JsDuck");
