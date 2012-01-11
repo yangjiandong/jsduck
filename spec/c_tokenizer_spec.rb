@@ -2,106 +2,244 @@ require "jsduck/c_tokenizer"
 
 describe JsDuck::CTokenizer do
 
-  def raw_tokenize(js)
-    JsDuck::CTokenizer.tokenize(js)
+  def lex(source)
+    JsDuck::CTokenizer.tokenize(source).map do |t|
+      tok = [t[:type], t[:value]]
+      tok << t[:linenr] if t[:linenr]
+      tok
+    end
   end
 
-  def tokenize(js)
-    raw_tokenize(js).map {|t| t[:type] }
+  it "parses out identifiers" do
+    lex(" fo o ").should == [[:ident, "fo"], [:ident, "o"]]
   end
 
-  describe "tokenize" do
-    it "parses out identifiers as individual chars" do
-      raw_tokenize(" fo o ").map {|t| t[:value] }.should == ["fo", "o"]
+  it "parses out keywords" do
+    lex("if").should == [[:if, :if]]
+  end
+
+  it "parses out number token" do
+    lex(" 51").should == [[:number, '51']]
+  end
+
+  it "parses out double-quoted string" do
+    lex(' "foo" ').should == [[:string, '"foo"']]
+  end
+
+  it "parses out single-quoted string" do
+    lex(" 'foo' ").should == [[:string, "'foo'"]]
+  end
+
+  it "parses out unfinished string" do
+    lex(" 'foo ").should == [[:string, "'foo "]]
+  end
+
+  it "parses out operators" do
+    lex(" + . * ").should == [
+      [:operator, "+"],
+      [:operator, "."],
+      [:operator, "*"],
+    ]
+  end
+
+  it "parses out doc-comment" do
+    lex(" /** */ ").should == [[:doc_comment, "/** */"]]
+  end
+
+  it "ignores block-comment" do
+    lex(" /* foo */ ").should == []
+  end
+
+  it "ignores line-comment" do
+    lex(" // foo  ").should == []
+  end
+
+  # ---
+
+  it "tokenizes simple expression" do
+    lex("var foo = 8;").should == [
+      [:var, :var],
+      [:ident, "foo"],
+      [:operator, "="],
+      [:number, "8"],
+      [:operator, ";"]
+    ]
+  end
+
+  it "handles $ in identifiers" do
+    lex("$fo$o").should == [[:ident, "$fo$o"]]
+  end
+
+  it "handles numbers in identifiers" do
+    lex("x2").should == [[:ident, "x2"]]
+  end
+
+  # describe "differenciates regex from division" do
+
+  #   it "when regex after operator" do
+  #     lex("x = /  /; y / 2").should == [
+  #       [:ident, "x"],
+  #       [:operator, "="],
+  #       [:regex, "/  /"],
+  #       [:operator, ";"],
+  #       [:ident, "y"],
+  #       [:operator, "/"],
+  #       [:number, "2"]
+  #     ]
+  #   end
+
+  #   it "when regex after return" do
+  #     lex("return /foo/.test;").should == [
+  #       [:return, :return],
+  #       [:regex, "/foo/"],
+  #       [:operator, "."],
+  #       [:ident, "test"],
+  #       [:operator, ";"]
+  #     ]
+  #   end
+
+  #   it "when regex after typeof" do
+  #     lex("typeof /foo/;").should == [
+  #       [:typeof, :typeof],
+  #       [:regex, "/foo/"],
+  #       [:operator, ";"]
+  #     ]
+  #   end
+
+  #   it "when division after this" do
+  #     lex("this / 3").should == [
+  #       [:this, :this],
+  #       [:operator, "/"],
+  #       [:number, "3"]
+  #     ]
+  #   end
+  # end
+
+  # it "allows [/] inside regex" do
+  #   lex("/ [/] /").should == [[:regex, "/ [/] /"]]
+  # end
+
+  # describe "identifies strings" do
+
+  #   before do
+  #     @d = '"' # double-quote
+  #     @s = "'" # single-quote
+  #     @b = "\\" # backslash
+  #   end
+
+  #   it "when single-quote inside double-quoted string" do
+  #     lex(@d+@s+@d   + ' "blah"').should == [[:string, @s], [:string, "blah"]]
+  #   end
+
+  #   it "when double-quote inside single-quoted string" do
+  #     lex(@s+@d+@s   + ' "blah"').should == [[:string, @d], [:string, "blah"]]
+  #   end
+
+  #   it "when escaped double-quote inside double-quoted string" do
+  #     lex(@d+@b+@d+@d   + ' "blah"').should == [[:string, @b+@d], [:string, "blah"]]
+  #   end
+
+  #   it "when escaped single-quote inside single-quoted string" do
+  #     lex(@s+@b+@s+@s   + ' "blah"').should == [[:string, @b+@s], [:string, "blah"]]
+  #   end
+
+  #   it "when newlines escaped inside double-quoted string" do
+  #     lex(@d+"A\\\nB"+@d).should == [[:string, "A\\\nB"]]
+  #   end
+
+  #   it "when newlines escaped inside single-quoted string" do
+  #     lex(@s+"A\\\nB"+@s).should == [[:string, "A\\\nB"]]
+  #   end
+  # end
+
+  it "identifies $ as beginning of identifier" do
+    lex("$1a").should == [[:ident, "$1a"]]
+  end
+
+  it "allows $ as a name of identifier" do
+    lex("$ = 3")[0].should == [:ident, "$"]
+  end
+
+  it "ignores one-line comments" do
+    lex("a // foo\n b").should == [[:ident, "a"], [:ident, "b"]]
+  end
+
+  it "ignores multi-line comments" do
+    lex("a /* foo */ b").should == [[:ident, "a"], [:ident, "b"]]
+  end
+
+  # it "identifies doc-comments together with line numbers" do
+  #   lex("/** foo */").should == [[:doc_comment, "/** foo */", 1]]
+  # end
+
+  # it "counts line numbers correctly" do
+  #   tokens = lex(<<-EOS)
+  #     foo = {
+  #       bar: foo,
+  #       /**
+  #        * My comment.
+  #        */
+  #   EOS
+  #   tokens.last.last.should == 3
+  # end
+
+  describe "handles unfinished" do
+
+    it "single-line comment" do
+      lex("// ").should == []
     end
 
-    it "parses out number token" do
-      raw_tokenize(" 51").should == [{:type => :number, :value => '51'}]
+    it "multi-line comment" do
+      lex("/* ").should == []
     end
 
-    it "parses out double-quoted string" do
-      raw_tokenize(' "foo" ').should == [{:type => :string, :value => '"foo"'}]
-    end
-
-    it "parses out single-quoted string" do
-      raw_tokenize(" 'foo' ").should == [{:type => :string, :value => "'foo'"}]
-    end
-
-    it "parses out unfinished string" do
-      raw_tokenize(" 'foo ").should == [{:type => :string, :value => "'foo "}]
-    end
-
-    it "parses out operators" do
-      raw_tokenize(" + . * ").should == [
-        {:type => :operator, :value => "+"},
-        {:type => :operator, :value => "."},
-        {:type => :operator, :value => "*"},
-      ]
-    end
-
-    it "parses out doc-comment" do
-      raw_tokenize(" /** */ ").should == [{:type => :doc_comment, :value => "/** */"}]
-    end
-
-    it "ignore block-comment" do
-      raw_tokenize(" /* foo */ ").should == []
-    end
-
-    it "ignore line-comment" do
-      raw_tokenize(" // foo  ").should == []
-    end
-
-    # it "works with comment in the middle" do
-    #   tokenize("foo = /** */ 3;").should == [
-    #     :ident, :operator, :doc_comment, :number, :operator
-    #   ]
+    # it "doc-comment" do
+    #   lex("/** ").should == [[:doc_comment, "/** ", 1]]
     # end
 
-    # it "works with comment at the beginning" do
-    #   tokenize("/** */ var Foo;").should == [
-    #     :doc_comment, :var, :ident, :operator
-    #   ]
+    # it "regex" do
+    #   lex("/[a-z] ").should == [[:regex, "/[a-z] "]]
     # end
 
-    # it "works with comment at the end" do
-    #   tokenize("'use strict'; /** */").should == [
-    #     :string, :operator, :doc_comment
-    #   ]
+    # it "single-quoted string" do
+    #   lex("' ").should == [[:string, " "]]
     # end
 
-    # it "works when only comment" do
-    #   tokenize(" /** I am comment*/ ").should == [
-    #     :doc_comment
-    #   ]
-    # end
-
-    # it "works when just one token before comment" do
-    #   tokenize(" ; /** I am comment*/ ").should == [
-    #     :operator, :doc_comment
-    #   ]
-    # end
-
-    # it "works when just one token after comment" do
-    #   tokenize(" /** I am comment*/ z").should == [
-    #     :doc_comment, :ident
-    #   ]
-    # end
-
-    # it "augments :doc_comment token with line number" do
-    #   tokens = raw_tokenize("\n \n /**Com1*/ \n /**Com2\n*/ /**Com3*/")
-    #   tokens[0][:linenr].should == 3
-    #   tokens[1][:linenr].should == 4
-    #   tokens[2][:linenr].should == 5
-    # end
-
-    # it "converts boolean token to ident" do
-    #   raw_tokenize("true")[0].should == {:type => :ident, :value => "true"}
-    # end
-
-    # it "converts null token to ident" do
-    #   raw_tokenize("null")[0].should == {:type => :ident, :value => "null"}
+    # it "double-quoted string" do
+    #   lex('" ').should == [[:string, " "]]
     # end
   end
+
+  # describe "passing StringScanner to constructor" do
+  #   before do
+  #     @scanner = StringScanner.new("5 + 5")
+  #     @lex = JsDuck::Lexer.new(@scanner)
+  #   end
+
+  #   it "uses that StringScanner for parsing" do
+  #     @lex.look(:number).should == true
+  #   end
+
+  #   it "doesn't advance the scan pointer when nothing done" do
+  #     @scanner.rest.should == "5 + 5"
+  #   end
+
+  #   it "#look doesn't advance the scan pointer" do
+  #     @lex.look(:number)
+  #     @scanner.rest.should == "5 + 5"
+  #   end
+
+  #   it "#empty? doesn't advance the scan pointer" do
+  #     @lex.empty?
+  #     @scanner.rest.should == "5 + 5"
+  #   end
+
+  #   it "#next advances the scan pointer only until the end of token (excluding whitespace after token)" do
+  #     @lex.next
+  #     @scanner.rest.should == " + 5"
+  #   end
+  # end
+
 
 end
 

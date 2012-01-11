@@ -86,6 +86,8 @@ VALUE tokenize(VALUE self, VALUE js) {
     char* input = RSTRING_PTR(js);
     VALUE tokens = rb_ary_new();
 
+    // access keywords Hash
+    VALUE keywords_map = rb_const_get(self, rb_intern("KEYWORDS_MAP"));
     // used for storing lengths of tokens
     int len;
 
@@ -94,9 +96,16 @@ VALUE tokenize(VALUE self, VALUE js) {
 
     while (c) {
         if (c>='a' && c<='z' || c>='A' && c<='Z' || c == '_' || c == '$') {
-            // add ident token
+            // add keyword or ident token.
             len = ident_length(input, i);
-            rb_ary_push(tokens, make_token(SYM_IDENT, rb_str_new(input+i, len)));
+            VALUE str = rb_str_new(input+i, len);
+            VALUE kw = rb_hash_aref(keywords_map, str);
+            if (kw == Qnil) {
+                rb_ary_push(tokens, make_token(SYM_IDENT, str));
+            }
+            else {
+                rb_ary_push(tokens, make_token(kw, kw));
+            }
             i += len - 1;
         }
         else if (c >= '0' && c <= '9') {
@@ -164,5 +173,34 @@ void Init_c_tokenizer() {
 	VALUE JsDuck = rb_define_module("JsDuck");
 	VALUE CTokenizer = rb_define_class_under(JsDuck, "CTokenizer", rb_cObject);
 	rb_define_singleton_method(CTokenizer, "tokenize", tokenize, 1);
+
+    // build lookup table for keywords
+    VALUE keywords_map = rb_hash_new();
+    rb_hash_aset(keywords_map, rb_str_new2("break"),      ID2SYM(rb_intern("break")));
+    rb_hash_aset(keywords_map, rb_str_new2("case"),       ID2SYM(rb_intern("case")));
+    rb_hash_aset(keywords_map, rb_str_new2("catch"),      ID2SYM(rb_intern("catch")));
+    rb_hash_aset(keywords_map, rb_str_new2("continue"),   ID2SYM(rb_intern("continue")));
+    rb_hash_aset(keywords_map, rb_str_new2("default"),    ID2SYM(rb_intern("default")));
+    rb_hash_aset(keywords_map, rb_str_new2("delete"),     ID2SYM(rb_intern("delete")));
+    rb_hash_aset(keywords_map, rb_str_new2("do"),         ID2SYM(rb_intern("do")));
+    rb_hash_aset(keywords_map, rb_str_new2("else"),       ID2SYM(rb_intern("else")));
+    rb_hash_aset(keywords_map, rb_str_new2("finally"),    ID2SYM(rb_intern("finally")));
+    rb_hash_aset(keywords_map, rb_str_new2("for"),        ID2SYM(rb_intern("for")));
+    rb_hash_aset(keywords_map, rb_str_new2("function"),   ID2SYM(rb_intern("function")));
+    rb_hash_aset(keywords_map, rb_str_new2("if"),         ID2SYM(rb_intern("if")));
+    rb_hash_aset(keywords_map, rb_str_new2("in"),         ID2SYM(rb_intern("in")));
+    rb_hash_aset(keywords_map, rb_str_new2("instanceof"), ID2SYM(rb_intern("instanceof")));
+    rb_hash_aset(keywords_map, rb_str_new2("new"),        ID2SYM(rb_intern("new")));
+    rb_hash_aset(keywords_map, rb_str_new2("return"),     ID2SYM(rb_intern("return")));
+    rb_hash_aset(keywords_map, rb_str_new2("switch"),     ID2SYM(rb_intern("switch")));
+    rb_hash_aset(keywords_map, rb_str_new2("this"),       ID2SYM(rb_intern("this")));
+    rb_hash_aset(keywords_map, rb_str_new2("throw"),      ID2SYM(rb_intern("throw")));
+    rb_hash_aset(keywords_map, rb_str_new2("try"),        ID2SYM(rb_intern("try")));
+    rb_hash_aset(keywords_map, rb_str_new2("typeof"),     ID2SYM(rb_intern("typeof")));
+    rb_hash_aset(keywords_map, rb_str_new2("var"),        ID2SYM(rb_intern("var")));
+    rb_hash_aset(keywords_map, rb_str_new2("void"),       ID2SYM(rb_intern("void")));
+    rb_hash_aset(keywords_map, rb_str_new2("while"),      ID2SYM(rb_intern("while")));
+    rb_hash_aset(keywords_map, rb_str_new2("with"),       ID2SYM(rb_intern("with")));
+    rb_define_const(CTokenizer, "KEYWORDS_MAP", keywords_map);
 }
 
