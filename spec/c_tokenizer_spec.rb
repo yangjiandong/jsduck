@@ -22,18 +22,6 @@ describe JsDuck::CTokenizer do
     lex(" 51").should == [[:number, '51']]
   end
 
-  it "parses out double-quoted string" do
-    lex(' "foo" ').should == [[:string, '"foo"']]
-  end
-
-  it "parses out single-quoted string" do
-    lex(" 'foo' ").should == [[:string, "'foo'"]]
-  end
-
-  it "parses out unfinished string" do
-    lex(" 'foo ").should == [[:string, "'foo "]]
-  end
-
   it "parses out operators" do
     lex(" + . * ").should == [
       [:operator, "+"],
@@ -119,38 +107,46 @@ describe JsDuck::CTokenizer do
   #   lex("/ [/] /").should == [[:regex, "/ [/] /"]]
   # end
 
-  # describe "identifies strings" do
+  describe "identifies strings" do
 
-  #   before do
-  #     @d = '"' # double-quote
-  #     @s = "'" # single-quote
-  #     @b = "\\" # backslash
-  #   end
+    before do
+      @d = '"' # double-quote
+      @s = "'" # single-quote
+      @b = "\\" # backslash
+    end
 
-  #   it "when single-quote inside double-quoted string" do
-  #     lex(@d+@s+@d   + ' "blah"').should == [[:string, @s], [:string, "blah"]]
-  #   end
+    it "when double-quoted" do
+      lex(' "foo" ').should == [[:string, 'foo']]
+    end
 
-  #   it "when double-quote inside single-quoted string" do
-  #     lex(@s+@d+@s   + ' "blah"').should == [[:string, @d], [:string, "blah"]]
-  #   end
+    it "when single-quoted" do
+      lex(" 'foo' ").should == [[:string, "foo"]]
+    end
 
-  #   it "when escaped double-quote inside double-quoted string" do
-  #     lex(@d+@b+@d+@d   + ' "blah"').should == [[:string, @b+@d], [:string, "blah"]]
-  #   end
+    it "when single-quote inside double-quoted string" do
+      lex(@d+@s+@d   + ' "blah"').should == [[:string, @s], [:string, "blah"]]
+    end
 
-  #   it "when escaped single-quote inside single-quoted string" do
-  #     lex(@s+@b+@s+@s   + ' "blah"').should == [[:string, @b+@s], [:string, "blah"]]
-  #   end
+    it "when double-quote inside single-quoted string" do
+      lex(@s+@d+@s   + ' "blah"').should == [[:string, @d], [:string, "blah"]]
+    end
 
-  #   it "when newlines escaped inside double-quoted string" do
-  #     lex(@d+"A\\\nB"+@d).should == [[:string, "A\\\nB"]]
-  #   end
+    it "when escaped double-quote inside double-quoted string" do
+      lex(@d+@b+@d+@d   + ' "blah"').should == [[:string, @b+@d], [:string, "blah"]]
+    end
 
-  #   it "when newlines escaped inside single-quoted string" do
-  #     lex(@s+"A\\\nB"+@s).should == [[:string, "A\\\nB"]]
-  #   end
-  # end
+    it "when escaped single-quote inside single-quoted string" do
+      lex(@s+@b+@s+@s   + ' "blah"').should == [[:string, @b+@s], [:string, "blah"]]
+    end
+
+    it "when newlines escaped inside double-quoted string" do
+      lex(@d+"A\\\nB"+@d).should == [[:string, "A\\\nB"]]
+    end
+
+    it "when newlines escaped inside single-quoted string" do
+      lex(@s+"A\\\nB"+@s).should == [[:string, "A\\\nB"]]
+    end
+  end
 
   it "identifies $ as beginning of identifier" do
     lex("$1a").should == [[:ident, "$1a"]]
@@ -201,13 +197,13 @@ describe JsDuck::CTokenizer do
     #   lex("/[a-z] ").should == [[:regex, "/[a-z] "]]
     # end
 
-    # it "single-quoted string" do
-    #   lex("' ").should == [[:string, " "]]
-    # end
+    it "single-quoted string" do
+      lex("' ").should == [[:string, " "]]
+    end
 
-    # it "double-quoted string" do
-    #   lex('" ').should == [[:string, " "]]
-    # end
+    it "double-quoted string" do
+      lex('" ').should == [[:string, " "]]
+    end
   end
 
   # describe "passing StringScanner to constructor" do

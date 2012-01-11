@@ -115,9 +115,10 @@ VALUE tokenize(VALUE self, VALUE js) {
             i += len - 1;
         }
         else if (c == '"' || c == '\'') {
-            // add string token
+            // add string token (exclude quotes from :value)
             len = string_length(input, i);
-            rb_ary_push(tokens, make_token(SYM_STRING, rb_str_new(input+i, len)));
+            int adjust = (input[i+len-1] == '"' || input[i+len-1] == '\'') ? 2 : 1;
+            rb_ary_push(tokens, make_token(SYM_STRING, rb_str_new(input+i+1, len-adjust)));
             i += len - 1;
         }
         else if (c == '/') {
