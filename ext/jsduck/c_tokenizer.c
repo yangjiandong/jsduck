@@ -130,8 +130,6 @@ VALUE tokenize(VALUE self, VALUE js) {
     // access keywords Hash
     VALUE keywords_map = rb_const_get(self, rb_intern("KEYWORDS_MAP"));
     VALUE keyword_this = rb_hash_aref(keywords_map, rb_str_new2("this"));
-    // used for storing lengths of tokens
-    int len;
     // true when next token can be regex
     int regex_possible = 1;
     // for keeping track of doc-comment line numbers
@@ -144,7 +142,7 @@ VALUE tokenize(VALUE self, VALUE js) {
     while (c) {
         if (c>='a' && c<='z' || c>='A' && c<='Z' || c == '_' || c == '$') {
             // add keyword or ident token.
-            len = ident_length(input, i);
+            int len = ident_length(input, i);
             VALUE str = rb_str_new(input+i, len);
             VALUE kw = rb_hash_aref(keywords_map, str);
             if (kw == Qnil) {
@@ -159,14 +157,14 @@ VALUE tokenize(VALUE self, VALUE js) {
         }
         else if (c >= '0' && c <= '9') {
             // add number token
-            len = number_length(input, i);
+            int len = number_length(input, i);
             rb_ary_push(tokens, make_token(SYM_NUMBER, rb_str_new(input+i, len)));
             regex_possible = 0;
             i += len - 1;
         }
         else if (c == '"' || c == '\'') {
             // add string token (exclude quotes from :value)
-            len = string_length(input, i);
+            int len = string_length(input, i);
             int last_c = input[i+len-1];
             int adjust = (last_c == '"' || last_c == '\'') ? 2 : 1;
             rb_ary_push(tokens, make_token(SYM_STRING, rb_str_new(input+i+1, len-adjust)));
@@ -180,7 +178,7 @@ VALUE tokenize(VALUE self, VALUE js) {
             if (c2 == '*') {
                 if (input[i+2] == '*') {
                     // add doc-comment token
-                    len = block_comment_length(input, i);
+                    int len = block_comment_length(input, i);
                     VALUE tok = make_token(SYM_DOC_COMMENT, rb_str_new(input+i, len));
 
                     // add linenr to token
@@ -202,7 +200,7 @@ VALUE tokenize(VALUE self, VALUE js) {
             }
             else if (regex_possible) {
                 // add regex token
-                len = regex_length(input, i);
+                int len = regex_length(input, i);
                 rb_ary_push(tokens, make_token(SYM_REGEX, rb_str_new(input+i, len)));
                 regex_possible = 1;
                 i += len - 1;
