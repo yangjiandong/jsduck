@@ -44,6 +44,10 @@ shared_examples_for "tokenizer" do
     lex(" 51").should == [[:number, '51']]
   end
 
+  it "parses out number with fraction" do
+    lex(" 3.14 ").should == [[:number, '3.14']]
+  end
+
   # Operators
 
   it "parses out operators" do
