@@ -10,17 +10,41 @@ describe JsDuck::CTokenizer do
     end
   end
 
+  # Identifiers
+
   it "parses out identifiers" do
     lex(" fo o ").should == [[:ident, "fo"], [:ident, "o"]]
   end
+
+  it "allows _ in identifiers" do
+    lex("_foo").should == [[:ident, "_foo"]]
+  end
+
+  it "handles $ in identifiers" do
+    lex("$fo$o").should == [[:ident, "$fo$o"]]
+  end
+
+  it "allows $ as a name of identifier" do
+    lex("$ = 3")[0].should == [:ident, "$"]
+  end
+
+  it "handles numbers in identifiers" do
+    lex("x2").should == [[:ident, "x2"]]
+  end
+
+  # Keywords
 
   it "parses out keywords" do
     lex("if").should == [[:if, :if]]
   end
 
+  # Numbers
+
   it "parses out number token" do
     lex(" 51").should == [[:number, '51']]
   end
+
+  # Operators
 
   it "parses out operators" do
     lex(" + . * ").should == [
@@ -30,23 +54,7 @@ describe JsDuck::CTokenizer do
     ]
   end
 
-  it "tokenizes simple expression" do
-    lex("var foo = 8;").should == [
-      [:var, :var],
-      [:ident, "foo"],
-      [:operator, "="],
-      [:number, "8"],
-      [:operator, ";"]
-    ]
-  end
-
-  it "handles $ in identifiers" do
-    lex("$fo$o").should == [[:ident, "$fo$o"]]
-  end
-
-  it "handles numbers in identifiers" do
-    lex("x2").should == [[:ident, "x2"]]
-  end
+  # Regular expressions
 
   it "parses out regex" do
     lex("/.*/").should == [[:regex, "/.*/"]]
@@ -109,6 +117,8 @@ describe JsDuck::CTokenizer do
     lex("/ [\\]..] /").should == [[:regex, "/ [\\]..] /"]]
   end
 
+  # Strings
+
   describe "identifies strings" do
 
     before do
@@ -150,13 +160,7 @@ describe JsDuck::CTokenizer do
     end
   end
 
-  it "identifies $ as beginning of identifier" do
-    lex("$1a").should == [[:ident, "$1a"]]
-  end
-
-  it "allows $ as a name of identifier" do
-    lex("$ = 3")[0].should == [:ident, "$"]
-  end
+  # Comments
 
   it "ignores one-line comments" do
     lex("a // foo\n b").should == [[:ident, "a"], [:ident, "b"]]
@@ -192,6 +196,8 @@ describe JsDuck::CTokenizer do
     tokens[2].last.should == 3
   end
 
+  # Handling of premature end of input
+
   describe "handles unfinished" do
 
     it "single-line comment" do
@@ -219,36 +225,17 @@ describe JsDuck::CTokenizer do
     end
   end
 
-  # describe "passing StringScanner to constructor" do
-  #   before do
-  #     @scanner = StringScanner.new("5 + 5")
-  #     @lex = JsDuck::Lexer.new(@scanner)
-  #   end
+  # Simple test for all-together
 
-  #   it "uses that StringScanner for parsing" do
-  #     @lex.look(:number).should == true
-  #   end
-
-  #   it "doesn't advance the scan pointer when nothing done" do
-  #     @scanner.rest.should == "5 + 5"
-  #   end
-
-  #   it "#look doesn't advance the scan pointer" do
-  #     @lex.look(:number)
-  #     @scanner.rest.should == "5 + 5"
-  #   end
-
-  #   it "#empty? doesn't advance the scan pointer" do
-  #     @lex.empty?
-  #     @scanner.rest.should == "5 + 5"
-  #   end
-
-  #   it "#next advances the scan pointer only until the end of token (excluding whitespace after token)" do
-  #     @lex.next
-  #     @scanner.rest.should == " + 5"
-  #   end
-  # end
-
+  it "tokenizes simple expression" do
+    lex("var foo = 8;").should == [
+      [:var, :var],
+      [:ident, "foo"],
+      [:operator, "="],
+      [:number, "8"],
+      [:operator, ";"]
+    ]
+  end
 
 end
 
