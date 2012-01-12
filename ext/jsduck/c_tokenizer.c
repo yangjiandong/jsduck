@@ -2,6 +2,7 @@
 
 VALUE SYM_TYPE;
 VALUE SYM_VALUE;
+VALUE SYM_LINENR;
 
 VALUE SYM_IDENT;
 VALUE SYM_STRING;
@@ -112,6 +113,16 @@ int regex_length(char* input, int start) {
     return i - start;
 }
 
+// Counts newline chars in input between start and end indexes
+int count_newlines(char* input, int start, int end) {
+    int cnt = 0;
+    int i;
+    for (i=start; i<end; i++) {
+        if (input[i] == '\n') cnt++;
+    }
+    return cnt;
+}
+
 VALUE tokenize(VALUE self, VALUE js) {
     char* input = RSTRING_PTR(js);
     VALUE tokens = rb_ary_new();
@@ -123,6 +134,9 @@ VALUE tokenize(VALUE self, VALUE js) {
     int len;
     // true when next token can be regex
     int regex_possible = 1;
+    // for keeping track of doc-comment line numbers
+    int prev_doc_comment_index = 0;
+    int newline_count = 1; // line-numbers are 1-based
 
     int i = 0;
     char c = input[i];
@@ -167,7 +181,14 @@ VALUE tokenize(VALUE self, VALUE js) {
                 if (input[i+2] == '*') {
                     // add doc-comment token
                     len = block_comment_length(input, i);
-                    rb_ary_push(tokens, make_token(SYM_DOC_COMMENT, rb_str_new(input+i, len)));
+                    VALUE tok = make_token(SYM_DOC_COMMENT, rb_str_new(input+i, len));
+
+                    // add linenr to token
+                    newline_count += count_newlines(input, prev_doc_comment_index, i);
+                    prev_doc_comment_index = i;
+                    rb_hash_aset(tok, SYM_LINENR, INT2NUM(newline_count));
+
+                    rb_ary_push(tokens, tok);
                     i += len - 1;
                 }
                 else {
@@ -212,6 +233,7 @@ void Init_c_tokenizer() {
     // Initialize symbols
 	SYM_TYPE = ID2SYM(rb_intern("type"));
 	SYM_VALUE = ID2SYM(rb_intern("value"));
+	SYM_LINENR = ID2SYM(rb_intern("linenr"));
 
 	SYM_IDENT = ID2SYM(rb_intern("ident"));
 	SYM_STRING = ID2SYM(rb_intern("string"));

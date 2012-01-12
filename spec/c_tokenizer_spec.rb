@@ -30,18 +30,6 @@ describe JsDuck::CTokenizer do
     ]
   end
 
-  it "parses out doc-comment" do
-    lex(" /** */ ").should == [[:doc_comment, "/** */"]]
-  end
-
-  it "ignores block-comment" do
-    lex(" /* foo */ ").should == []
-  end
-
-  it "ignores line-comment" do
-    lex(" // foo  ").should == []
-  end
-
   it "tokenizes simple expression" do
     lex("var foo = 8;").should == [
       [:var, :var],
@@ -170,20 +158,31 @@ describe JsDuck::CTokenizer do
     lex("a /* foo */ b").should == [[:ident, "a"], [:ident, "b"]]
   end
 
-  # it "identifies doc-comments together with line numbers" do
-  #   lex("/** foo */").should == [[:doc_comment, "/** foo */", 1]]
-  # end
+  it "identifies doc-comments together with line numbers" do
+    lex("/** foo */").should == [[:doc_comment, "/** foo */", 1]]
+  end
 
-  # it "counts line numbers correctly" do
-  #   tokens = lex(<<-EOS)
-  #     foo = {
-  #       bar: foo,
-  #       /**
-  #        * My comment.
-  #        */
-  #   EOS
-  #   tokens.last.last.should == 3
-  # end
+  it "counts line numbers correctly" do
+    tokens = lex(<<-EOS)
+      foo = {
+        bar: foo,
+        /**
+         * My comment.
+         */
+    EOS
+    tokens.last.last.should == 3
+  end
+
+  it "counts line numbers correctly when multiple doc-comments involved" do
+    tokens = lex(<<-EOS)
+        /** First comment */
+        /** Second comment */
+        /** Third comment */
+    EOS
+    tokens[0].last.should == 1
+    tokens[1].last.should == 2
+    tokens[2].last.should == 3
+  end
 
   describe "handles unfinished" do
 
@@ -195,9 +194,9 @@ describe JsDuck::CTokenizer do
       lex("/* ").should == []
     end
 
-    # it "doc-comment" do
-    #   lex("/** ").should == [[:doc_comment, "/** ", 1]]
-    # end
+    it "doc-comment" do
+      lex("/** ").should == [[:doc_comment, "/** ", 1]]
+    end
 
     it "regex" do
       lex("/[a-z] ").should == [[:regex, "/[a-z] "]]
