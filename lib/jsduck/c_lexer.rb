@@ -6,6 +6,7 @@ module JsDuck
   class CLexer
     def initialize(input)
       @tokens = CTokenizer.tokenize(input)
+      @length = @tokens.length
       @position = 0
     end
 
@@ -43,7 +44,7 @@ module JsDuck
 
     # True when no more tokens
     def empty?
-      !@tokens[@position]
+      @position >= @length
     end
 
     private
