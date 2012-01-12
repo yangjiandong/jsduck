@@ -105,7 +105,7 @@ int regex_length(char* input, int start) {
     }
     // on normal case scan modifiers
     if (c == '/') {
-        i++;
+        c = input[++i];
         while (c == 'g' || c == 'i' || c == 'm') {
             c = input[++i];
         }

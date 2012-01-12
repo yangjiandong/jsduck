@@ -48,6 +48,14 @@ describe JsDuck::CTokenizer do
     lex("x2").should == [[:ident, "x2"]]
   end
 
+  it "parses out regex" do
+    lex("/.*/").should == [[:regex, "/.*/"]]
+  end
+
+  it "parses out regex with modifiers" do
+    lex("/123/img").should == [[:regex, "/123/img"]]
+  end
+
   describe "differenciates regex from division" do
 
     it "when regex after operator" do
