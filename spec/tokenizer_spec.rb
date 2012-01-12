@@ -1,13 +1,13 @@
+require "jsduck/lexer"
 require "jsduck/c_tokenizer"
 
-describe JsDuck::CTokenizer do
+# Shared tests to ensure that JsDuck::Lexer and JsDuck::CTokenizer
+# tokenize input the same way.
+
+shared_examples_for "tokenizer" do
 
   def lex(source)
-    JsDuck::CTokenizer.tokenize(source).map do |t|
-      tok = [t[:type], t[:value]]
-      tok << t[:linenr] if t[:linenr]
-      tok
-    end
+    @tokenize.call(source)
   end
 
   # Identifiers
@@ -239,3 +239,35 @@ describe JsDuck::CTokenizer do
 
 end
 
+describe JsDuck::CTokenizer do
+  before do
+    @tokenize = lambda do |source|
+      JsDuck::CTokenizer.tokenize(source).map do |t|
+        tok = [t[:type], t[:value]]
+        tok << t[:linenr] if t[:linenr]
+        tok
+      end
+    end
+  end
+
+  it_should_behave_like "tokenizer"
+end
+
+describe JsDuck::Lexer do
+  before do
+    @tokenize = lambda do |source|
+      lex = JsDuck::Lexer.new(source)
+      tokens = []
+      while !lex.empty?
+        t = lex.next(true)
+        tokens << [t[:type], t[:value]]
+        if t[:linenr]
+          tokens.last << t[:linenr]
+        end
+      end
+      tokens
+    end
+  end
+
+  it_should_behave_like "tokenizer"
+end
