@@ -1,9 +1,5 @@
 #include "ruby.h"
 
-VALUE SYM_TYPE;
-VALUE SYM_VALUE;
-VALUE SYM_LINENR;
-
 VALUE SYM_IDENT;
 VALUE SYM_STRING;
 VALUE SYM_NUMBER;
@@ -11,11 +7,11 @@ VALUE SYM_OPERATOR;
 VALUE SYM_REGEX;
 VALUE SYM_DOC_COMMENT;
 
-// Creates Ruby Hash: { :type => <type>, :value => <value> }
+// Creates Ruby array: [ <type>, <value> ]
 VALUE make_token(VALUE type, VALUE value) {
-    VALUE tok = rb_hash_new();
-    rb_hash_aset(tok, SYM_TYPE, type);
-    rb_hash_aset(tok, SYM_VALUE, value);
+    VALUE tok = rb_ary_new();
+    rb_ary_push(tok, type);
+    rb_ary_push(tok, value);
     return tok;
 }
 
@@ -184,7 +180,7 @@ VALUE tokenize(VALUE self, VALUE js) {
                     // add linenr to token
                     newline_count += count_newlines(input, prev_doc_comment_index, i);
                     prev_doc_comment_index = i;
-                    rb_hash_aset(tok, SYM_LINENR, INT2NUM(newline_count));
+                    rb_ary_push(tok, INT2NUM(newline_count));
 
                     rb_ary_push(tokens, tok);
                     i += len - 1;
@@ -229,10 +225,6 @@ VALUE tokenize(VALUE self, VALUE js) {
 
 void Init_c_tokenizer() {
     // Initialize symbols
-	SYM_TYPE = ID2SYM(rb_intern("type"));
-	SYM_VALUE = ID2SYM(rb_intern("value"));
-	SYM_LINENR = ID2SYM(rb_intern("linenr"));
-
 	SYM_IDENT = ID2SYM(rb_intern("ident"));
 	SYM_STRING = ID2SYM(rb_intern("string"));
 	SYM_NUMBER = ID2SYM(rb_intern("number"));

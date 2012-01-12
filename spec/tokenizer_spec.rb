@@ -242,11 +242,7 @@ end
 describe JsDuck::CTokenizer do
   before do
     @tokenize = lambda do |source|
-      JsDuck::CTokenizer.tokenize(source).map do |t|
-        tok = [t[:type], t[:value]]
-        tok << t[:linenr] if t[:linenr]
-        tok
-      end
+      JsDuck::CTokenizer.tokenize(source)
     end
   end
 
