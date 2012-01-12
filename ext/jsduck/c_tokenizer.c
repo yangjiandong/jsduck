@@ -220,21 +220,21 @@ VALUE tokenize(VALUE self, VALUE js) {
         c = input[++i];
     }
 
-	return tokens;
+    return tokens;
 }
 
 void Init_c_tokenizer() {
     // Initialize symbols
-	SYM_IDENT = ID2SYM(rb_intern("ident"));
-	SYM_STRING = ID2SYM(rb_intern("string"));
-	SYM_NUMBER = ID2SYM(rb_intern("number"));
-	SYM_OPERATOR = ID2SYM(rb_intern("operator"));
-	SYM_REGEX = ID2SYM(rb_intern("regex"));
-	SYM_DOC_COMMENT = ID2SYM(rb_intern("doc_comment"));
+    SYM_IDENT = ID2SYM(rb_intern("ident"));
+    SYM_STRING = ID2SYM(rb_intern("string"));
+    SYM_NUMBER = ID2SYM(rb_intern("number"));
+    SYM_OPERATOR = ID2SYM(rb_intern("operator"));
+    SYM_REGEX = ID2SYM(rb_intern("regex"));
+    SYM_DOC_COMMENT = ID2SYM(rb_intern("doc_comment"));
 
-	VALUE JsDuck = rb_define_module("JsDuck");
-	VALUE CTokenizer = rb_define_class_under(JsDuck, "CTokenizer", rb_cObject);
-	rb_define_singleton_method(CTokenizer, "tokenize", tokenize, 1);
+    VALUE JsDuck = rb_define_module("JsDuck");
+    VALUE CTokenizer = rb_define_class_under(JsDuck, "CTokenizer", rb_cObject);
+    rb_define_singleton_method(CTokenizer, "tokenize", tokenize, 1);
 
     // build lookup table for keywords
     VALUE keywords_map = rb_hash_new();
