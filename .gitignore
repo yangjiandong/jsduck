@@ -6,3 +6,4 @@ template-min/
 sdk-vars.rb
 tmp/
 lib/jsduck/c_tokenizer.so
+lib/jsduck/c_tokenizer.bundle
