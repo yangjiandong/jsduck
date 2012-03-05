@@ -5,6 +5,7 @@ require 'cgi'
 require 'jsduck/logger'
 require 'jsduck/inline_img'
 require 'jsduck/inline_video'
+require 'jsduck/inline_aside'
 
 module JsDuck
 
@@ -41,7 +42,7 @@ module JsDuck
     # name actually exists.
     attr_accessor :relations
 
-    def initialize(relations={}, opts={})
+    def initialize(relations={}, opts={}, assets={})
       @class_context = ""
       @doc_context = {}
       @max_length = 120
@@ -50,6 +51,7 @@ module JsDuck
 
       @inline_img = InlineImg.new(opts)
       @inline_video = InlineVideo.new(opts)
+      @inline_aside = InlineAside.new(assets)
 
       @link_tpl = opts[:link_tpl] || '<a href="%c%#%m">%a</a>'
       @link_re = /\{@link\s+(\S*?)(?:\s+(.+?))?\}/m
@@ -95,6 +97,8 @@ module JsDuck
         elsif substitute = @inline_img.replace(s)
           out += substitute
         elsif substitute = @inline_video.replace(s)
+          out += substitute
+        elsif substitute = @inline_aside.replace(s)
           out += substitute
         elsif s.check(/[{]/)
           # There might still be "{" that doesn't begin {@link} or {@img} - ignore it

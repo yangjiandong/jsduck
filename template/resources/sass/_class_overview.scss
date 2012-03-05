@@ -2,7 +2,7 @@
 @import "variables";
 @import "mixins";
 
-.class-overview {
+.class-overview, .guide-container {
   .hierarchy, .aside {
     @include border-radius(5px);
     background-color: #f7f7f7;

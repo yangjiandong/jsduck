@@ -28,10 +28,10 @@ module JsDuck
 
       @images = Images.new(@opts.images)
       @welcome = Welcome.create(@opts.welcome)
-      @guides = Guides.create(@opts.guides, DocFormatter.new(@relations, @opts), @opts)
+      @guides = Guides.create(@opts.guides, DocFormatter.new(@relations, @opts, self), @opts)
       @videos = Videos.create(@opts.videos)
       @examples = Examples.create(@opts.examples, @opts)
-      @categories = Categories.create(@opts.categories_path, DocFormatter.new(@relations, @opts), @relations)
+      @categories = Categories.create(@opts.categories_path, DocFormatter.new(@relations, @opts, self), @relations)
     end
 
     # Writes out the assets that can be written out separately:
