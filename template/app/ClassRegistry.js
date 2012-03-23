@@ -41,7 +41,7 @@ Ext.define("Docs.ClassRegistry", {
         }
 
         var searchFull = /[.:]/.test(text);
-        var safeText = Ext.escapeRe(text);
+        var safeText = Ext.String.escapeRegex(text);
         var reFull = new RegExp("^" + safeText + "$", "i");
         var reBeg = new RegExp("^" + safeText, "i");
         var reMid = new RegExp(safeText, "i");

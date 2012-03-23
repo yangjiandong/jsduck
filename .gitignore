@@ -1,6 +1,7 @@
 *.gem
 template/extjs
+template/touch
 template/resources/css
-template/resources/sass/.sass-cache
+.sass-cache
 template-min/
 sdk-vars.rb

@@ -15,6 +15,12 @@ module JsDuck
         "favicon.ico",
         "extjs",
         "resources",
+        "touch",
+        "touch-app",
+        "touch-template.html",
+        "touch-app.js",
+        "app.json",
+        ".senchasdk"
       ]
     end
 

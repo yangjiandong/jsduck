@@ -1,0 +1,68 @@
+// This file is required for the Sencah Touch 2 build process
+{
+    "name": "Docs",
+    "js": [
+        {
+            "path": "touch/sencha-touch-all.js"
+        },
+        {
+            "path": "touch-app.js",
+            "update": "delta"
+        }
+    ],
+
+    // "css": [
+    //     {
+    //         "path": "resources/css/app.css",
+    //         "update": "delta"
+    //     }
+    // ],
+
+    "appCache": {
+        "cache": [
+            "index.html"
+        ],
+        "network": [
+            "*"
+        ],
+        "fallback": []
+    },
+
+    /**
+     * Extra resources to be copied along when build
+     */
+    "extras": [
+        "resources/images",
+        "resources/touch-icons",
+        "resources/touch-loading"
+    ],
+
+    /**
+     * Directory path to store all previous production builds. Note that the content generated inside this directory
+     * must be kept intact for proper generation of delta between updates
+     */
+    "archivePath": "archive",
+
+    /**
+     * Default paths to build this application to for each environment
+     */
+    "buildPaths": {
+        "production": "touch-build"
+    },
+
+    /**
+     * Build options
+     */
+    "buildOptions": {
+        "product": "touch",
+        "minVersion": 3,
+        "debug": false,
+        "logger": "no"
+    },
+
+    /**
+     * Uniquely generated id for this application, used as prefix for localStorage keys.
+     * Normally you should never change this value.
+     */
+    "id": "905e61a0-71fb-11e1-b42a-61a0c6271820"
+}

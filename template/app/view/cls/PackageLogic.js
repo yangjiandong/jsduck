@@ -97,6 +97,7 @@ Ext.define('Docs.view.cls.PackageLogic', {
         text: this.shortName(cls.name),
         url: "#!/api/"+cls.name,
         iconCls: cls.icon,
+        className: cls.name,
         cls: cls["private"] ? "private" : "",
         leaf: true,
         children: []

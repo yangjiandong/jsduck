@@ -305,11 +305,6 @@ class JsDuckRunner
     system "cp -r #{@ext_dir} #{@out_dir}/extjs-build"
   end
 
-  # Copy over Sencha Touch
-  def copy_touch2_build
-    system "cp -r #{@sdk_dir}/touch/build #{@out_dir}/touch"
-  end
-
   def run
     # Pass multiple arguments to system, so we'll take advantage of the built-in escaping
     system(*["ruby", "bin/jsduck"].concat(@options))
@@ -445,7 +440,6 @@ task :touch2, [:mode] => :sass do |t, args|
   runner.add_comments('touch', '2') if mode == "debug" || mode == "live"
   runner.run
 
-  runner.copy_touch2_build if mode != "export"
 end
 
 desc "Run JSDuck on Sencha Touch Charts (for internal use at Sencha)\n" +
