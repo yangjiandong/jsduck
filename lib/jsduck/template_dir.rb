@@ -17,7 +17,6 @@ module JsDuck
         "resources",
         "touch",
         "touch-app",
-        "touch-template.html",
         "touch-app.js",
         "app.json",
         ".senchasdk"

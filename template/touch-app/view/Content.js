@@ -6,7 +6,6 @@ Ext.define('TouchDocs.view.Content', {
     config: {
 
         id: 'center-container',
-        style: 'border-left: 1px solid black',
 
         items: [
             {
@@ -14,6 +13,11 @@ Ext.define('TouchDocs.view.Content', {
                 xtype: 'toolbar',
                 title: 'Welcome',
                 items: [
+                    {
+                        iconCls: 'list',
+                        iconMask: true,
+                        action: 'slideNav'
+                    },
                     {
                         xtype: 'spacer'
                     },

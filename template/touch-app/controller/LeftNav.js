@@ -10,6 +10,13 @@ Ext.define('TouchDocs.controller.LeftNav', {
         control: {
             'leftNav': {
                 leafitemtap: 'onItemTap'
+            },
+            'content button[action=slideNav]': {
+                tap: function(btn, e) {
+                    Ext.getCmp('slideNav').toggle();
+                    e.stopEvent();
+                    return false;
+                }
             }
         }
     },
@@ -19,7 +26,9 @@ Ext.define('TouchDocs.controller.LeftNav', {
         var itemType = record.get('type'),
             name = record.get('name');
 
-        if (itemType == 'guide') {
+        if (itemType == 'home') {
+            this.showHome();
+        } else if (itemType == 'guide') {
             this.showGuide(name);
         } else  if (record.get('className')) {
             this.showClass(record.get('className'));
@@ -61,5 +70,9 @@ Ext.define('TouchDocs.controller.LeftNav', {
             },
             scope: this
         });
+    },
+
+    showHome: function() {
+        this.getContent().setHtml(document.getElementById('welcome-content').innerHTML);
     }
 })

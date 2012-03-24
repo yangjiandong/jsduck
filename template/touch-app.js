@@ -1,13 +1,24 @@
 //<debug>
 Ext.Loader.setPath({
     'Ext': 'touch/src',
-    'Docs': 'app'
+    'Docs': 'app',
+    'TouchDocs.recognizer': 'touch-app'
 });
 //</debug>
 
 Ext.application({
     name: 'TouchDocs',
     appFolder: 'touch-app',
+
+    eventPublishers: {
+        touchGesture: {
+            recognizers: {
+                offscreenswipe: {
+                    xclass: 'TouchDocs.recognizer.OffscreenSwipe'
+                }
+            }
+        }
+    },
 
     requires: [
         'Ext.MessageBox',
@@ -53,6 +64,7 @@ Ext.application({
         Ext.getStore('NavigationTree').setNavigationData(Docs.data);
 
         // Initialize the main view
+        // Ext.Viewport.add(Ext.create('TouchDocs.view.Main'));
         Ext.Viewport.add(Ext.create('TouchDocs.view.Main'));
 
         // setInterval(function(){

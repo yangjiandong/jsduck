@@ -19,6 +19,7 @@ module JsDuck
         FileUtils.cp(@opts.template_dir+"/index.php", @opts.output_dir+"/index.php")
         create_template_html(@opts.template_dir+"/template.html", @opts.output_dir+"/template.html")
         create_print_template_html(@opts.template_dir+"/print-template.html", @opts.output_dir+"/print-template.html")
+        create_touch_template_html(@opts.template_dir+"/touch-template.html", @opts.output_dir+"/touch-template.html")
       else
         create_template_html(@opts.template_dir+"/template.html", @opts.output_dir+"/index.html")
       end
@@ -44,6 +45,14 @@ module JsDuck
       write_template(in_file, out_file, {
         "{title}" => @opts.title,
         "{header}" => @opts.header,
+      })
+    end
+
+    def create_touch_template_html(in_file, out_file)
+      write_template(in_file, out_file, {
+        "{title}" => @opts.title,
+        "{head_html}" => @opts.head_html,
+        "{welcome}" => @assets.welcome.to_html
       })
     end
 

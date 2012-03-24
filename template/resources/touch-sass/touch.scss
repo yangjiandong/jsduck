@@ -25,6 +25,22 @@
 
 @import "../sass/class_overview";
 
+@include pictos-iconmask('list');
+
+#center-container {
+  border-left: 1px solid black;
+  background: #fff;
+}
+
+a {
+  color: $docs-link-color;
+  text-decoration: none;
+  &:hover {
+    color: $docs-link-hover-color; } }
+
+pre, code, kbd, samp, tt {
+  font-family: $docs-monospace-font; }
+
 .class-overview, .guide-container, .comment-index {
 
   background: #fff;

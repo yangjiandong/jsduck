@@ -16,7 +16,7 @@ Ext.define('TouchDocs.store.NavigationTree', {
         var tree = {
             text: 'Sencha Touch Docs',
             children: [
-                { text: 'Home', leaf: true },
+                { text: 'Home', type: 'home', leaf: true },
                 { text: 'Classes', children: [] },
                 { text: 'Guides', children: [] },
                 { text: 'Videos', children: [] }

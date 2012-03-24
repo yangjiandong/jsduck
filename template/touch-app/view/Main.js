@@ -1,22 +1,17 @@
 Ext.define("TouchDocs.view.Main", {
 
-    extend: 'Ext.Container',
+    extend: 'TouchDocs.view.SlideNav',
     xtype: 'mainContainer',
+    id: 'slideNav',
 
     config: {
+        sideContainer: {
+            xtype: 'leftNav',
+            width: 260
+        },
 
-        layout: 'card',
-
-        items: [
-            {
-                xtype: 'leftNav',
-                docked: 'left',
-                width: 260
-            },
-            {
-                xtype: 'content',
-                flex: 1
-            }
-        ]
+        container: {
+            xtype: 'content'
+        }
     }
 });
