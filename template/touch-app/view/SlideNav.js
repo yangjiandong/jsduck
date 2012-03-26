@@ -4,13 +4,9 @@ Ext.define("TouchDocs.view.SlideNav", {
 
     config: {
         layout: 'fit',
-
         open: false,
-
         sideContainerWidth: 260,
-
         sideContainer: null,
-
         container: null
     },
 
@@ -74,7 +70,7 @@ Ext.define("TouchDocs.view.SlideNav", {
         var touch = e.changedTouches[0],
             startX = touch.pageX;
 
-        if (startX < 25 && !this.getOpen()) {
+        if (startX < 50 && !this.getOpen()) {
             this.canOpen = true;
         } else {
             this.canOpen = false;
@@ -86,23 +82,34 @@ Ext.define("TouchDocs.view.SlideNav", {
         var touch = e.changedTouches[0],
             startX = Math.min(touch.pageX, this.getSideContainerWidth());
 
-        if (this.canOpen) {
+        if (this.lastX && startX > this.lastX) {
+            this.direction = 'right';
+        } else {
+            this.direction = 'left';
+        }
+        this.lastX = startX;
 
-            console.log('left', startX);
-            this.getContainer().element.setStyle('-webkit-transform', 'translateX(' + startX + 'px)')
+        if (this.canOpen) {
+            this.getContainer().element.dom.style.setProperty('-webkit-transform', 'translateX(' + startX + 'px)', 'important');
         }
     },
 
     onDragEnd: function(e) {
+
+        if (this.canOpen === false) {
+            return;
+        }
+
         this.canOpen = false;
 
         var touch = e.changedTouches[0],
             startX = Math.min(touch.pageX, this.getSideContainerWidth()),
             sideContainerWidth = this.getSideContainerWidth();
 
-        if (startX > (sideContainerWidth / 2)) {
-            this.updateOpen(true);
+        if ((this.direction == 'right') || startX > (sideContainerWidth / 2)) {
+            this.setOpen(true);
         } else {
+            this.setOpen(false);
             this.updateOpen(false);
         }
     },
