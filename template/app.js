@@ -11,6 +11,7 @@ Ext.Loader.setConfig({
     }
 });
 
+Ext.require('Ext.data.JsonStore');
 Ext.require('Docs.view.Viewport');
 Ext.require('Ext.form.field.Trigger');
 Ext.require('Ext.tab.Panel');

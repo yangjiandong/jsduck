@@ -8,7 +8,9 @@
   -->
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  <script type="text/javascript">Docs = {data: {localStorageDb: "docs"}};</script>
+  <script type="text/javascript">
+    Docs = { data: { localStorageDb: "docs", search: [], classes: [], examples: [], guides: [], signatures: [], stats: [], videos: [] }, otherProducts: [] };
+  </script>
   <script type="text/javascript" src="extjs/ext.js"></script>
   <!-- BEGIN JS -->
   <script type="text/javascript" src="resources/codemirror/codemirror.js"></script>
@@ -20,7 +22,19 @@
   <script type="text/javascript" src="resources/prettify/prettify.js"></script>
 
 </head>
-<body>
+<body id="ext-body">
 
+  <div id="loading"><span class="title"></span><span class="logo"></span></div>
+
+  <form id="history-form" class="x-hide-display">
+      <input type="hidden" id="x-history-field" />
+      <iframe id="x-history-frame"></iframe>
+  </form>
+
+  <div id="header-content"></div>
+  <div id="welcome-content"></div>
+  <div id="categories-content"></div>
+  <div id="guides-content"></div>
+  <div id="footer-content"></div>
 </body>
 </html>

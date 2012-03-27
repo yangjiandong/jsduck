@@ -7,9 +7,12 @@
         },
         {
             "path": "touch-app.js",
-            "update": "delta"
+            "update": "delta",
+            "bundle": true
         }
     ],
+
+    "url": "http://localhost/sencha/jsduck_out/touch-template.html",
 
     // "css": [
     //     {
@@ -28,13 +31,12 @@
         "fallback": []
     },
 
+    "indexHtmlPath": "touch-template.html",
+
     /**
      * Extra resources to be copied along when build
      */
-    "extras": [
-        "resources/images",
-        "resources/touch-icons",
-        "resources/touch-loading"
+    "resources": [
     ],
 
     /**
@@ -47,7 +49,8 @@
      * Default paths to build this application to for each environment
      */
     "buildPaths": {
-        "production": "touch-build"
+        "production": "touch-build",
+        "testing": "touch-testing"
     },
 
     /**

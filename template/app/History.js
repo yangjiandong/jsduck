@@ -77,7 +77,10 @@ Ext.define("Docs.History", {
             }
             else if (!this.noRepeatNav) {
                 this.noRepeatNav = true; // Prevent infinite nav loop
-                this.navigate(Ext.getCmp('doctabs').staticTabs[0].href, noHistory);
+                var staticTabs = Ext.getCmp('doctabs').staticTabs;
+                if (staticTabs && staticTabs.length) {
+                    this.navigate(staticTabs[0].href, noHistory);
+                }
             }
         }
     },
