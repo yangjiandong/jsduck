@@ -1,3 +1,8 @@
+/**
+ * Left-side navigation component.
+ *
+ * Displays the content of NavigationTree store.
+ */
 Ext.define('TouchDocs.view.LeftNav', {
     extend: 'Ext.dataview.NestedList',
     xtype: 'leftNav',

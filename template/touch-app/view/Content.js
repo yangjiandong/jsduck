@@ -1,3 +1,9 @@
+/**
+ * Main content area of the app.
+ *
+ * Also contains toolbar with side navigation toggling button and
+ * search field.
+ */
 Ext.define('TouchDocs.view.Content', {
     extend: 'Ext.Container',
     xtype: 'content',

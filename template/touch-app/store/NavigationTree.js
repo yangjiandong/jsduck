@@ -1,3 +1,6 @@
+/**
+ * Store for items in LeftNav navigation tree.
+ */
 Ext.define('TouchDocs.store.NavigationTree', {
     extend: 'Ext.data.TreeStore',
     requires: [
@@ -8,6 +11,14 @@ Ext.define('TouchDocs.store.NavigationTree', {
         model: 'TouchDocs.model.TreeItem'
     },
 
+    /**
+     * Loads data to store from Docs.data object.  Called from touch-app.js.
+     *
+     * @param {Object} data An object with properties:
+     * @param {Object[]} data.classes
+     * @param {Object[]} data.guides
+     * @param {Object[]} data.videos
+     */
     setNavigationData: function(data) {
         var tree = {
             text: 'Sencha Touch Docs',

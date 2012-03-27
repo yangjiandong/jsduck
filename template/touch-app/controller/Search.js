@@ -1,3 +1,6 @@
+/**
+ * Handles typing a query to search field.
+ */
 Ext.define('TouchDocs.controller.Search', {
     extend: 'Ext.app.Controller',
 

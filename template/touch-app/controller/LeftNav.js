@@ -1,3 +1,8 @@
+/**
+ * Handles loading the page when item selected in LeftNav.
+ *
+ * Also toggles the LeftNav when button on main toolbar clicked.
+ */
 Ext.define('TouchDocs.controller.LeftNav', {
     extend: 'Ext.app.Controller',
 

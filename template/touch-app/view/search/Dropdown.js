@@ -1,3 +1,8 @@
+/**
+ * Search results dropdown.
+ *
+ * Displays the content from Search store.
+ */
 Ext.define('TouchDocs.view.search.Dropdown', {
     extend: 'Ext.Panel',
     xtype: 'search',

@@ -1,3 +1,6 @@
+/**
+ * A navigation tree model.
+ */
 Ext.define('TouchDocs.model.TreeItem', {
     extend: 'Ext.data.Model',
 
