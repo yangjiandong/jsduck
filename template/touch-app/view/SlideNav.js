@@ -1,10 +1,32 @@
+/**
+ * Container with main content area and sidebar that can be hidden/shown.
+ *
+ * The sidebar is hidden/shown when user swipes from the side of main content area.
+ * Additionally #setOpen and #toggle methods can be used.
+ */
 Ext.define("TouchDocs.view.SlideNav", {
     extend: 'Ext.Container',
 
     config: {
         layout: 'fit',
+        /**
+         * @cfg
+         * True to make the sideContainer initially visible.
+         * @accessor
+         */
         open: false,
+        /**
+         * @cfg
+         * The side container that can be hidden or shown using #setOpen method.
+         * This container must have width specified.
+         * @accessor
+         */
         sideContainer: null,
+        /**
+         * @cfg
+         * The main container.
+         * @accessor
+         */
         container: null
     },
 
