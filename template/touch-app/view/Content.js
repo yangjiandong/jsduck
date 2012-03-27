@@ -1,10 +1,8 @@
 Ext.define('TouchDocs.view.Content', {
-
     extend: 'Ext.Container',
     xtype: 'content',
 
     config: {
-
         id: 'center-container',
 
         items: [

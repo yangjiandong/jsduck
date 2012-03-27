@@ -1,5 +1,4 @@
 Ext.define('TouchDocs.view.search.Dropdown', {
-
     extend: 'Ext.Panel',
     xtype: 'search',
 
@@ -19,4 +18,4 @@ Ext.define('TouchDocs.view.search.Dropdown', {
             }
         ]
     }
-})
+});

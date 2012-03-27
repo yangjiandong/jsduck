@@ -64,13 +64,11 @@ Ext.application({
         Ext.getStore('NavigationTree').setNavigationData(Docs.data);
 
         // Initialize the main view
-        // Ext.Viewport.add(Ext.create('TouchDocs.view.Main'));
         Ext.Viewport.add(Ext.create('TouchDocs.view.Main'));
 
         // setInterval(function(){
         //     Ext.DomQuery.select('link')[0].href = "resources/css/app.css?" + Math.ceil(Math.random() * 100000000)
         // }, 1000);
-
     },
 
     onUpdated: function() {

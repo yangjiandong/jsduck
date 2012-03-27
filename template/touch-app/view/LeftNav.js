@@ -1,5 +1,4 @@
 Ext.define('TouchDocs.view.LeftNav', {
-
     extend: 'Ext.dataview.NestedList',
     xtype: 'leftNav',
 
