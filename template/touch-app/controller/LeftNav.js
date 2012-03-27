@@ -23,26 +23,19 @@ Ext.define('TouchDocs.controller.LeftNav', {
     },
 
     onItemTap: function(nestedlist, list, idx, target, record) {
-        var itemType = record.get('type'),
-            name = record.get('name');
+        var itemType = record.get('type');
 
         if (itemType === 'home') {
             this.showHome();
         }
         else if (itemType === 'guide') {
-            this.showGuide(name);
+            this.showGuide(record.get('name'));
         }
         else if (record.get('className')) {
             this.showClass(record.get('className'));
         }
         else if (itemType === 'video') {
-            this.getMainTitleBar().setTitle(record.get('title'));
-            this.getContent().setHtml([
-                '<div class="guide-container">',
-                    '<iframe src="http://player.vimeo.com/video/' + record.get('videoId') + '" width="640" height="480" frameborder="0"></iframe>',
-                    '<p>' + record.get('description') + '</p>',
-                '</div>'
-            ].join(''));
+            this.showVideo(record);
         }
 
         this.getSlideNav().setOpen(false);
@@ -70,6 +63,16 @@ Ext.define('TouchDocs.controller.LeftNav', {
             },
             scope: this
         });
+    },
+
+    showVideo: function(record) {
+        this.getMainTitleBar().setTitle(record.get('title'));
+        this.getContent().setHtml([
+            '<div class="guide-container">',
+                '<iframe src="http://player.vimeo.com/video/' + record.get('videoId') + '" width="640" height="480" frameborder="0"></iframe>',
+                '<p>' + record.get('description') + '</p>',
+            '</div>'
+        ].join(''));
     },
 
     showHome: function() {
