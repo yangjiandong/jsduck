@@ -14,7 +14,7 @@ Ext.define('TouchDocs.view.Content', {
                     {
                         iconCls: 'list',
                         iconMask: true,
-                        action: 'slideNav'
+                        action: 'toggleNavigation'
                     },
                     {
                         xtype: 'spacer'

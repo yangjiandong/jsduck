@@ -5,16 +5,16 @@ Ext.define('TouchDocs.controller.LeftNav', {
         refs: {
             leftNav: 'leftNav',
             content: 'content',
-            slideNav: 'mainContainer',
+            mainContainer: 'mainContainer',
             mainTitleBar: 'content toolbar'
         },
         control: {
             'leftNav': {
                 leafitemtap: 'onItemTap'
             },
-            'content button[action=slideNav]': {
+            'content button[action=toggleNavigation]': {
                 tap: function(btn, e) {
-                    Ext.getCmp('slideNav').toggle();
+                    this.getMainContainer().toggle();
                     e.stopEvent();
                     return false;
                 }
@@ -38,7 +38,7 @@ Ext.define('TouchDocs.controller.LeftNav', {
             this.showVideo(record);
         }
 
-        this.getSlideNav().setOpen(false);
+        this.getMainContainer().setOpen(false);
     },
 
     showGuide: function(name) {
