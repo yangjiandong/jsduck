@@ -33,7 +33,7 @@ Ext.define("TouchDocs.view.SlideNav", {
         this.getSideContainer();
 
         if (newContainer) {
-            newContainer.setZIndex(100);
+            newContainer.setZIndex(3);
             this.add(newContainer);
 
             newContainer.element.on({

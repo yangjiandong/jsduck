@@ -13,8 +13,26 @@ Ext.define('TouchDocs.view.search.Dropdown', {
 
         items: [
             {
+                cls: 'searchDropdown',
+                itemCls: 'item',
+                baseCls: 'l',
                 xtype: 'list',
-                itemTpl: '{name}',
+                itemTpl: Ext.create('Ext.XTemplate',
+                    '<div class="icon {icon}"></div>',
+                    '<div class="meta">{[this.getMetaTags(values.meta)]}</div>',
+                    '<div class="title {[this.getCls(values.meta)]}">{name}</div>',
+                    '<div class="class">{fullName}</div>',
+                    {
+                        getCls: function(meta) {
+                            return meta["private"] ? "private" : (meta.removed ? "removed" : "");
+                        },
+                        getMetaTags: function(meta) {
+                            return Ext.Array.map(Docs.data.signatures, function(s) {
+                                return meta[s.key] ? '<span class="signature '+s.key+'">'+(s["short"])+'</span>' : '';
+                            }).join(' ');
+                        }
+                    }
+                ),
                 store: 'Search'
             }
         ]

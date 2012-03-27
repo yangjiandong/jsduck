@@ -22,7 +22,9 @@ Ext.define('TouchDocs.view.Content', {
                         xtype: 'spacer'
                     },
                     {
-                        xtype: 'searchfield'
+                        xtype: 'searchfield',
+                        placeHolder: 'Search',
+                        width: 170
                     }
                 ]
             }
@@ -34,6 +36,19 @@ Ext.define('TouchDocs.view.Content', {
     initialize: function() {
         this.callParent();
         this.setHtml(document.getElementById('welcome-content').innerHTML);
+
+        this.element.addListener('tap', function(cmp, el) {
+            Ext.get(el).up('.member').toggleCls('open');
+        }, this, {
+            preventDefault: true,
+            delegate: '.expandable'
+        });
+
+        // Do nothing when clicking on not-expandable items
+        this.element.addListener('click', Ext.emptyFn, this, {
+            preventDefault: true,
+            delegate: '.not-expandable'
+        });
     }
 
 });

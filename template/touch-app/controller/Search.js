@@ -7,7 +7,8 @@ Ext.define('TouchDocs.controller.Search', {
         },
         control: {
             'searchfield': {
-                keyup: 'onSearch'
+                keyup: 'onSearch',
+                focus: 'showSearch'
             }
         }
     },
@@ -19,6 +20,12 @@ Ext.define('TouchDocs.controller.Search', {
         if (!this.searchDropdown) {
             this.searchDropdown = Ext.create('TouchDocs.view.search.Dropdown');
         }
-        this.searchDropdown.showBy(this.getSearchField())
+        this.searchDropdown.showBy(this.getSearchField());
+    },
+
+    showSearch: function() {
+        if (this.searchDropdown) {
+            this.searchDropdown.showBy(this.getSearchField());
+        }
     }
 });
