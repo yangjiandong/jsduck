@@ -4,7 +4,6 @@ Ext.define("TouchDocs.view.SlideNav", {
     config: {
         layout: 'fit',
         open: false,
-        sideContainerWidth: 260,
         sideContainer: null,
         container: null
     },
@@ -79,7 +78,7 @@ Ext.define("TouchDocs.view.SlideNav", {
 
     onDrag: function(e) {
         var touch = e.changedTouches[0],
-            startX = Math.min(touch.pageX, this.getSideContainerWidth());
+            startX = Math.min(touch.pageX, this.getSideContainer().getWidth());
 
         if (this.lastX && startX > this.lastX) {
             this.direction = 'right';
@@ -101,8 +100,8 @@ Ext.define("TouchDocs.view.SlideNav", {
         this.canOpen = false;
 
         var touch = e.changedTouches[0],
-            startX = Math.min(touch.pageX, this.getSideContainerWidth()),
-            sideContainerWidth = this.getSideContainerWidth();
+            sideContainerWidth = this.getSideContainer().getWidth(),
+            startX = Math.min(touch.pageX, sideContainerWidth);
 
         if ((this.direction === 'right') || startX > (sideContainerWidth / 2)) {
             this.setOpen(true);
@@ -135,7 +134,7 @@ Ext.define("TouchDocs.view.SlideNav", {
             duration: 250,
             to: {
                 transform: {
-                    translateX: (open) ? 260 : 0
+                    translateX: open ? this.getSideContainer().getWidth() : 0
                 }
             },
             preserveEndState: true
