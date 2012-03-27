@@ -37,7 +37,23 @@ Ext.define('TouchDocs.view.Content', {
 
     initialize: function() {
         this.callParent();
+        this.loadWelcomePage();
+    },
+
+    /**
+     * Loads the initial welcome page.
+     */
+    loadWelcomePage: function() {
+        this.setTitle("Welcome");
         this.setHtml(document.getElementById('welcome-content').innerHTML);
+    },
+
+    /**
+     * Sets the title of toolbar.
+     * @param {String} title
+     */
+    setTitle: function(title) {
+        this.down("toolbar").setTitle(title);
     }
 
 });
