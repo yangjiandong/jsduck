@@ -14,4 +14,5 @@ Ext.define("TouchDocs.view.Main", {
             xtype: 'content'
         }
     }
+
 });

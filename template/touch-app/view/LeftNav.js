@@ -7,22 +7,14 @@ Ext.define('TouchDocs.view.LeftNav', {
         title: 'Sencha Touch Docs',
         xtype: 'nestedlist',
 
-        displayField: 'text',
         store: 'NavigationTree',
-        useTitleAsBackText: false
+        useTitleAsBackText: false,
 
-        // listConfig: {
-        //     items: [
-        //         {
-        //             docked: 'top',
-        //             xtype: 'toolbar',
-        //             items: [
-        //                 {
-        //                     xtype: 'searchfield'
-        //                 }
-        //             ]
-        //         }
-        //     ]
-        // }
+        listConfig: {
+            cls: 'navList',
+            itemTpl: [
+                '<span class="{iconCls}"></span>{text}'
+            ]
+        }
     }
 });

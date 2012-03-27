@@ -5,6 +5,7 @@ Ext.define('TouchDocs.controller.LeftNav', {
         refs: {
             leftNav: 'leftNav',
             content: 'content',
+            slideNav: 'mainContainer',
             mainTitleBar: 'content toolbar'
         },
         control: {
@@ -41,6 +42,8 @@ Ext.define('TouchDocs.controller.LeftNav', {
                 '</div>'
             ].join(''));
         }
+
+        this.getSlideNav().setOpen(false);
 
     },
 

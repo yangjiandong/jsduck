@@ -50,7 +50,9 @@
   .icon-singleton-redirect {
     background: url(../images/icons.png) no-repeat 0 -600px; }
   .icon-component-redirect {
-    background: url(../images/icons.png) no-repeat 0 -640px; } }
+    background: url(../images/icons.png) no-repeat 0 -640px; }
+  .icon-sencha {
+    background: url(../images/icons.png) no-repeat 0 -680px; } }
 
 @mixin green-button {
   @include box-shadow(#b3f33d 0 1px 0 0 inset);

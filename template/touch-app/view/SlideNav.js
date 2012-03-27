@@ -1,4 +1,5 @@
 Ext.define("TouchDocs.view.SlideNav", {
+
     extend: 'Ext.Container',
     xtype: 'mainContainer',
 

@@ -29,5 +29,11 @@ Ext.define('TouchDocs.view.Content', {
         ],
 
         scrollable: 'vertical'
+    },
+
+    initialize: function() {
+        this.callParent();
+        this.setHtml(document.getElementById('welcome-content').innerHTML);
     }
-})
+
+});

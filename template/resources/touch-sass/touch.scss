@@ -22,15 +22,28 @@
 
 @import "../sass/variables";
 @import "../sass/mixins";
-
 @import "../sass/class_overview";
+@import "../sass/touch_welcome";
 
 @include pictos-iconmask('list');
+
+@include icons;
 
 #center-container {
   border-left: 1px solid black;
   background: #fff;
+  -webkit-font-smoothing: antialiased;
 }
+
+#touch-welcome {
+  margin: -50px auto 0 auto;
+  .top h1 {
+    margin-bottom: 0; }
+  .top h2 {
+    margin-top: -10px;
+    margin-bottom: 10px; }
+  table {
+    margin-top: 20px; } }
 
 a {
   color: $docs-link-color;
@@ -169,3 +182,20 @@ p.screenshot {
 
 .x-panel-body-default {
   border-width: 0; }
+
+
+
+
+.navList {
+  span {
+    width: 20px;
+    height: 20px;
+    display: block;
+    float: left;
+    margin-top: 3px;
+    margin-right: 8px;
+  }
+}
+
+
+
