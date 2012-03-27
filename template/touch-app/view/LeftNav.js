@@ -4,7 +4,6 @@ Ext.define('TouchDocs.view.LeftNav', {
 
     config: {
         title: 'Sencha Touch Docs',
-        xtype: 'nestedlist',
 
         store: 'NavigationTree',
         useTitleAsBackText: false,
