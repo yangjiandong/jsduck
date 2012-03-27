@@ -67,12 +67,11 @@ Ext.define("TouchDocs.view.SlideNav", {
         }
     },
 
+    /**
+     * Toggles the visibility of #sideContainer.
+     */
     toggle: function() {
-        if (this.getOpen()) {
-            this.setOpen(false);
-        } else {
-            this.setOpen(true);
-        }
+        this.setOpen(!this.getOpen());
     },
 
     onContainerTap: function(e) {
