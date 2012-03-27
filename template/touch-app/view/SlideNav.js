@@ -27,8 +27,6 @@ Ext.define("TouchDocs.view.SlideNav", {
     },
 
     updateContainer: function(newContainer, oldContainer) {
-        this.getSideContainer();
-
         if (newContainer) {
             newContainer.setZIndex(100);
             this.add(newContainer);
@@ -112,24 +110,17 @@ Ext.define("TouchDocs.view.SlideNav", {
     },
 
     updateOpen: function(newOpen) {
-        var container = this.getContainer();
-
-        if (!this.initialized || !container) {
+        // don't animate when initially closed
+        if (!this.initialized && !newOpen) {
             return;
         }
 
-        if (newOpen) {
-            this.animate(true);
-        } else {
-            this.animate();
-        }
+        this.animate(newOpen);
     },
 
     animate: function(open) {
-        var container = this.getContainer();
-
         Ext.Animator.run({
-            element: container.element,
+            element: this.getContainer().element,
             easing: 'ease-out',
             duration: 250,
             to: {
