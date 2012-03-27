@@ -6,7 +6,7 @@ Ext.define('TouchDocs.view.search.Dropdown', {
         layout: 'fit',
 
         width: 300,
-        height: 300,
+        height: 482,
         modal: true,
         hideOnMaskTap: true,
         // Ensure the panel stays on top.
