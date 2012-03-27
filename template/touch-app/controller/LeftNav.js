@@ -81,6 +81,7 @@ Ext.define('TouchDocs.controller.LeftNav', {
     },
 
     showHome: function() {
+        this.getMainTitleBar().setTitle("Welcome");
         this.getContent().setHtml(document.getElementById('welcome-content').innerHTML);
     }
 });
