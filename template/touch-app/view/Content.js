@@ -39,7 +39,6 @@ Ext.define('TouchDocs.view.Content', {
 
     initialize: function() {
         this.callParent();
-        this.loadWelcomePage();
 
         this.element.addListener('tap', function(cmp, el) {
             Ext.get(el).up('.member').toggleCls('open');

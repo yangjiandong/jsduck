@@ -33,6 +33,7 @@ Ext.define('TouchDocs.controller.LeftNav', {
                 }
             },
             '!/video/:name': 'showVideo',
+            '!/home': 'showHome'
         },
 
         refs: {
@@ -59,7 +60,9 @@ Ext.define('TouchDocs.controller.LeftNav', {
         var itemType = record.get('type');
 
         if (itemType === 'home') {
-            this.showHome();
+            TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
+                url: '!/home'
+            }));
         }
         else if (itemType === 'guide') {
             TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {

@@ -66,6 +66,12 @@ Ext.application({
         // Initialize the main view
         Ext.Viewport.add(Ext.create('TouchDocs.view.Main'));
 
+        if (window.location.hash === '') {
+            TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
+                url: '!/home'
+            }));
+        }
+
         // setInterval(function(){
         //     Ext.DomQuery.select('link')[0].href = "resources/css/app.css?" + Math.ceil(Math.random() * 100000000)
         // }, 1000);
