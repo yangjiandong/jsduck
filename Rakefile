@@ -34,9 +34,8 @@ def load_sdk_vars
 end
 
 # Compress JS/CSS file in-place
-# Using a hackish way to access yui-compressor
 def yui_compress(fname)
-  system "java -jar $(dirname $(which sencha))/bin/yuicompressor.jar -o #{fname} #{fname}"
+  system "sencha fs minify #{fname} #{fname}"
 end
 
 # Reads in all CSS files referenced between BEGIN CSS and END CSS markers.
