@@ -1,5 +1,9 @@
+/**
+ * Search results dropdown.
+ *
+ * Displays the content from Search store.
+ */
 Ext.define('TouchDocs.view.search.Dropdown', {
-
     extend: 'Ext.Panel',
     xtype: 'search',
 
@@ -7,9 +11,12 @@ Ext.define('TouchDocs.view.search.Dropdown', {
         layout: 'fit',
 
         width: 300,
-        height: 300,
+        height: 482,
         modal: true,
         hideOnMaskTap: true,
+        // Ensure the panel stays on top.
+        // 99 is not enough, 100 seems to work.
+        zIndex: 100,
 
         items: [
             {
@@ -37,4 +44,4 @@ Ext.define('TouchDocs.view.search.Dropdown', {
             }
         ]
     }
-})
+});

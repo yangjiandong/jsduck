@@ -1,10 +1,14 @@
+/**
+ * Main content area of the app.
+ *
+ * Also contains toolbar with side navigation toggling button and
+ * search field.
+ */
 Ext.define('TouchDocs.view.Content', {
-
     extend: 'Ext.Container',
     xtype: 'content',
 
     config: {
-
         id: 'center-container',
 
         items: [
@@ -16,7 +20,7 @@ Ext.define('TouchDocs.view.Content', {
                     {
                         iconCls: 'list',
                         iconMask: true,
-                        action: 'slideNav'
+                        action: 'toggleNavigation'
                     },
                     {
                         xtype: 'spacer'
@@ -35,6 +39,14 @@ Ext.define('TouchDocs.view.Content', {
 
     initialize: function() {
         this.callParent();
+        this.loadWelcomePage();
+    },
+
+    /**
+     * Loads the initial welcome page.
+     */
+    loadWelcomePage: function() {
+        this.setTitle("Welcome");
         this.setHtml(document.getElementById('welcome-content').innerHTML);
 
         this.element.addListener('tap', function(cmp, el) {
@@ -49,6 +61,14 @@ Ext.define('TouchDocs.view.Content', {
             preventDefault: true,
             delegate: '.not-expandable'
         });
+    },
+
+    /**
+     * Sets the title of toolbar.
+     * @param {String} title
+     */
+    setTitle: function(title) {
+        this.down("toolbar").setTitle(title);
     }
 
 });

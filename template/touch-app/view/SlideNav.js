@@ -1,13 +1,32 @@
+/**
+ * Container with main content area and sidebar that can be hidden/shown.
+ *
+ * The sidebar is hidden/shown when user swipes from the side of main content area.
+ * Additionally #setOpen and #toggle methods can be used.
+ */
 Ext.define("TouchDocs.view.SlideNav", {
-
     extend: 'Ext.Container',
-    xtype: 'mainContainer',
 
     config: {
         layout: 'fit',
+        /**
+         * @cfg
+         * True to make the sideContainer initially visible.
+         * @accessor
+         */
         open: false,
-        sideContainerWidth: 260,
+        /**
+         * @cfg
+         * The side container that can be hidden or shown using #setOpen method.
+         * This container must have width specified.
+         * @accessor
+         */
         sideContainer: null,
+        /**
+         * @cfg
+         * The main container.
+         * @accessor
+         */
         container: null
     },
 
@@ -30,8 +49,6 @@ Ext.define("TouchDocs.view.SlideNav", {
     },
 
     updateContainer: function(newContainer, oldContainer) {
-        this.getSideContainer();
-
         if (newContainer) {
             newContainer.setZIndex(3);
             this.add(newContainer);
@@ -50,12 +67,11 @@ Ext.define("TouchDocs.view.SlideNav", {
         }
     },
 
+    /**
+     * Toggles the visibility of #sideContainer.
+     */
     toggle: function() {
-        if (this.getOpen()) {
-            this.setOpen(false);
-        } else {
-            this.setOpen(true);
-        }
+        this.setOpen(!this.getOpen());
     },
 
     onContainerTap: function(e) {
@@ -81,7 +97,7 @@ Ext.define("TouchDocs.view.SlideNav", {
 
     onDrag: function(e) {
         var touch = e.changedTouches[0],
-            startX = Math.min(touch.pageX, this.getSideContainerWidth());
+            startX = Math.min(touch.pageX, this.getSideContainer().getWidth());
 
         if (this.lastX && startX > this.lastX) {
             this.direction = 'right';
@@ -96,7 +112,6 @@ Ext.define("TouchDocs.view.SlideNav", {
     },
 
     onDragEnd: function(e) {
-
         if (this.canOpen === false) {
             return;
         }
@@ -104,10 +119,10 @@ Ext.define("TouchDocs.view.SlideNav", {
         this.canOpen = false;
 
         var touch = e.changedTouches[0],
-            startX = Math.min(touch.pageX, this.getSideContainerWidth()),
-            sideContainerWidth = this.getSideContainerWidth();
+            sideContainerWidth = this.getSideContainer().getWidth(),
+            startX = Math.min(touch.pageX, sideContainerWidth);
 
-        if ((this.direction == 'right') || startX > (sideContainerWidth / 2)) {
+        if ((this.direction === 'right') || startX > (sideContainerWidth / 2)) {
             this.setOpen(true);
         } else {
             this.setOpen(false);
@@ -116,29 +131,22 @@ Ext.define("TouchDocs.view.SlideNav", {
     },
 
     updateOpen: function(newOpen) {
-        var container = this.getContainer();
-
-        if (!this.initialized || !container) {
+        // don't animate when initially closed
+        if (!this.initialized && !newOpen) {
             return;
         }
 
-        if (newOpen) {
-            this.animate(true);
-        } else {
-            this.animate();
-        }
+        this.animate(newOpen);
     },
 
     animate: function(open) {
-        var container = this.getContainer();
-
         Ext.Animator.run({
-            element: container.element,
+            element: this.getContainer().element,
             easing: 'ease-out',
             duration: 250,
             to: {
                 transform: {
-                    translateX: (open) ? 260 : 0
+                    translateX: open ? this.getSideContainer().getWidth() : 0
                 }
             },
             preserveEndState: true
