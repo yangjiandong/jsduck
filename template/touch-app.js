@@ -1,7 +1,8 @@
 //<debug>
 Ext.Loader.setPath({
     'Ext': 'touch/src',
-    'Docs': 'app'
+    'Docs': 'app',
+    'TouchDocs': 'touch-app'
 });
 //</debug>
 

@@ -40,14 +40,6 @@ Ext.define('TouchDocs.view.Content', {
     initialize: function() {
         this.callParent();
         this.loadWelcomePage();
-    },
-
-    /**
-     * Loads the initial welcome page.
-     */
-    loadWelcomePage: function() {
-        this.setTitle("Welcome");
-        this.setHtml(document.getElementById('welcome-content').innerHTML);
 
         this.element.addListener('tap', function(cmp, el) {
             Ext.get(el).up('.member').toggleCls('open');
@@ -61,6 +53,18 @@ Ext.define('TouchDocs.view.Content', {
             preventDefault: true,
             delegate: '.not-expandable'
         });
+
+        this.down('toolbar').down('title').element.addListener('tap', function() {
+            this.getScrollable().getScroller().scrollTo(0, 0, true);
+        }, this);
+    },
+
+    /**
+     * Loads the initial welcome page.
+     */
+    loadWelcomePage: function() {
+        this.setTitle("Welcome");
+        this.setHtml(document.getElementById('welcome-content').innerHTML);
     },
 
     /**
