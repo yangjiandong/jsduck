@@ -42,7 +42,12 @@ Ext.define('TouchDocs.controller.Navigation', {
 
     showGuide: function(name, callback, scope) {
         if (this.currentContent === name) {
-            callback && callback.call(scope);
+            if (callback) {
+                callback.call(scope);
+            }
+            else {
+                this.getContent().scrollToTop();
+            }
             return;
         }
 
@@ -72,7 +77,12 @@ Ext.define('TouchDocs.controller.Navigation', {
 
     showClass: function(name, callback, scope) {
         if (this.currentContent === name) {
-            callback && callback.call(scope);
+            if (callback) {
+                callback.call(scope);
+            }
+            else {
+                this.getContent().scrollToTop();
+            }
             return;
         }
 
