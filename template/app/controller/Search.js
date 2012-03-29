@@ -22,7 +22,7 @@ Ext.define('Docs.controller.Search', {
         },
         {
             ref: 'field',
-            selector: '#search-field'
+            selector: 'searchfield'
         }
     ],
 
@@ -48,7 +48,7 @@ Ext.define('Docs.controller.Search', {
                     this.keepDropdown();
                 }
             },
-            '#search-field': {
+            'searchfield': {
                 keyup: function(el, ev) {
                     var dropdown = this.getDropdown();
 
@@ -115,6 +115,12 @@ Ext.define('Docs.controller.Search', {
                     // dropdown item.
                     var dropdown = this.getDropdown();
                     this.hideTimeout = Ext.Function.defer(dropdown.hide, 500, dropdown);
+                },
+                triggerclick: function(field) {
+                    field.reset();
+                    field.focus();
+                    field.setHideTrigger(true);
+                    this.getDropdown().hide();
                 }
             }
         });
@@ -150,7 +156,7 @@ Ext.define('Docs.controller.Search', {
         this.getDropdown().setStart(start);
         this.getDropdown().getStore().loadData(results.slice(start, end));
         // position dropdown below search box
-        this.getDropdown().alignTo('search-field', 'bl', [-12, -2]);
+        this.getDropdown().alignTo(this.getField().getEl(), 'bl', [-12, -2]);
         // hide dropdown when nothing found
         if (results.length === 0) {
             this.getDropdown().hide();
