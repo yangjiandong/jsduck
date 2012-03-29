@@ -127,7 +127,7 @@ Ext.define('TouchDocs.controller.Navigation', {
                 var memberEl = Ext.get(split[1] + '-' + split[2]);
                 if (memberEl) {
                     me.getContent().getScrollable().getScroller().scrollTo(0, memberEl.dom.offsetTop - 5);
-                    memberEl.toggleCls('open');
+                    memberEl.addCls('open');
                 }
             }, 150);
         });
