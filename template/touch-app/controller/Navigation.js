@@ -40,11 +40,9 @@ Ext.define('TouchDocs.controller.Navigation', {
         }
     },
 
-    showGuide: function(name, callback) {
+    showGuide: function(name, callback, scope) {
         if (this.currentContent === name) {
-            if (callback) {
-                callback();
-            }
+            callback && callback.call(scope);
             return;
         }
 
@@ -57,9 +55,7 @@ Ext.define('TouchDocs.controller.Navigation', {
             success: function(json) {
                 this.getContent().loadGuide(json.title, json.guide);
                 Ext.Viewport.setMasked(false);
-                if (callback) {
-                    callback();
-                }
+                callback && callback.call(scope);
             },
             failure: function() {
                 Ext.Viewport.setMasked(false);
@@ -69,17 +65,14 @@ Ext.define('TouchDocs.controller.Navigation', {
     },
 
     showGuideSection: function(name, section) {
-        var me = this;
         this.showGuide(name, function() {
-            me.getContent().scrollToId(name + section);
-        });
+            this.getContent().scrollToId(name + section);
+        }, this);
     },
 
-    showClass: function(name, callback) {
+    showClass: function(name, callback, scope) {
         if (this.currentContent === name) {
-            if (callback) {
-                callback();
-            }
+            callback && callback.call(scope);
             return;
         }
 
@@ -92,9 +85,7 @@ Ext.define('TouchDocs.controller.Navigation', {
             success: function(json) {
                 this.getContent().loadClass(json.name, json.html);
                 Ext.Viewport.setMasked(false);
-                if (callback) {
-                    callback();
-                }
+                callback && callback.call(scope);
             },
             failure: function() {
                 Ext.Viewport.setMasked(false);
@@ -104,15 +95,14 @@ Ext.define('TouchDocs.controller.Navigation', {
     },
 
     showClassMember: function(name) {
-        var me = this,
-            split = name.split('-'),
+        var split = name.split('-'),
             cls = split[0],
             memberType = split[1],
             memberName = split[2];
 
         this.showClass(cls, function() {
-            me.getContent().scrollToId(split[1] + '-' + split[2], 'open');
-        });
+            this.getContent().scrollToId(split[1] + '-' + split[2], 'open');
+        }, this);
     },
 
     showVideo: function(name) {
