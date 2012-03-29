@@ -29,27 +29,25 @@ Ext.define('TouchDocs.controller.LeftNav', {
         var itemType = record.get('type');
 
         if (itemType === 'home') {
-            TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
-                url: '!/home'
-            }));
+            this.addUrlToHistory('!/home');
         }
         else if (itemType === 'guide') {
-            TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
-                url: '!/guide/' + record.get('name')
-            }));
+            this.addUrlToHistory('!/guide/' + record.get('name'));
         }
         else if (record.get('className')) {
-            TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
-                url: '!/api/' + record.get('className')
-            }));
+            this.addUrlToHistory('!/api/' + record.get('className'));
         }
         else if (itemType === 'video') {
-            TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
-                url: '!/video/' + record.get('name')
-            }));
+            this.addUrlToHistory('!/video/' + record.get('name'));
         }
 
         this.getMainContainer().setOpen(false);
+    },
+
+    addUrlToHistory: function(url) {
+        TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
+            url: url
+        }));
     }
 
 });
