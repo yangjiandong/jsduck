@@ -16,6 +16,10 @@ function print_index_page() {
   echo file_get_contents("template.html");
 }
 
+function print_tablet_page() {
+  echo file_get_contents("touch-template.html");
+}
+
 function jsonp_decode($jsonp) {
   $jsonp = preg_replace('/^.*?\(/', "", $jsonp);
   $jsonp = preg_replace('/\);\s*$/', "", $jsonp);
@@ -56,6 +60,9 @@ if (isset($_GET["_escaped_fragment_"]) || isset($_GET["print"])) {
   catch (Exception $e) {
     print_page($e->getMessage(), $e->getMessage(), $fragment);
   }
+}
+else if (preg_match('/iPad/', $_SERVER["HTTP_USER_AGENT"])) {
+  print_tablet_page();
 }
 else {
   print_index_page();
