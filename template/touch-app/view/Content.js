@@ -40,17 +40,17 @@ Ext.define('TouchDocs.view.Content', {
     initialize: function() {
         this.callParent();
 
-        this.element.addListener('tap', function(cmp, el) {
+        this.element.addListener('tap', function(e, el) {
+            e.preventDefault();
             Ext.get(el).up('.member').toggleCls('open');
         }, this, {
-            preventDefault: true,
-            delegate: '.expandable'
+            delegate: '.member'
         });
 
-        // Do nothing when clicking on not-expandable items
-        this.element.addListener('click', Ext.emptyFn, this, {
-            preventDefault: true,
-            delegate: '.not-expandable'
+        this.element.addListener('click', function(e, el) {
+            e.preventDefault();
+        }, this, {
+            delegate: '.expandable'
         });
 
         this.down('toolbar').down('title').element.addListener('tap', function() {
