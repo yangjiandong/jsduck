@@ -19,7 +19,7 @@
 
 // Your custom code goes here...
 
-.x-html pre { white-space: pre-wrap; }
+pre, code { white-space: pre-wrap; }
 
 @import "../sass/variables";
 @import "../sass/mixins";
@@ -33,8 +33,7 @@
 #center-container {
   border-left: 1px solid black;
   background: #fff;
-  -webkit-font-smoothing: antialiased;
-}
+  -webkit-font-smoothing: antialiased; }
 
 #touch-welcome {
   margin: -50px auto 0 auto;
@@ -179,12 +178,20 @@ p.screenshot {
 #classindex {
   padding: 15px 10px 10px 10px; }
 
-
 .x-panel-body-default {
   border-width: 0; }
 
+.x-landscape img {
+  max-width: 980px; }
+.x-portrait img {
+  max-width: 720px; }
 
-
+@media screen and (max-width: 768px) {
+  #touch-welcome {
+    width: auto;
+    margin-left: 20px;
+    .top {
+      background-position-x: 0px; } } }
 
 .navList {
   span {
@@ -193,18 +200,13 @@ p.screenshot {
     display: block;
     float: left;
     margin-top: 3px;
-    margin-right: 8px;
-  }
-}
-
+    margin-right: 8px; } }
 
 .search-dropdown {
   .item {
     @include search-dropdown-item; }
-
   .icon {
     @include search-dropdown-icon; }
-
   .meta {
     @include search-dropdown-meta; } }
 
