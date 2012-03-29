@@ -36,7 +36,8 @@ Ext.define('TouchDocs.controller.Navigation', {
         },
 
         refs: {
-            content: 'content'
+            content: 'content',
+            navigationTree: 'leftNav'
         }
     },
 
@@ -52,6 +53,7 @@ Ext.define('TouchDocs.controller.Navigation', {
         }
 
         this.currentContent = name;
+        this.getNavigationTree().setActiveNode({ type: 'guide', name: name });
 
         this.mask();
         Ext.data.JsonP.request({
@@ -87,6 +89,7 @@ Ext.define('TouchDocs.controller.Navigation', {
         }
 
         this.currentContent = name;
+        this.getNavigationTree().setActiveNode({ className: name });
 
         this.mask();
         Ext.data.JsonP.request({
@@ -131,12 +134,16 @@ Ext.define('TouchDocs.controller.Navigation', {
         });
         var record = Ext.getStore('NavigationTree').getAt(idx);
 
-        this.getContent().loadVideo(record.get('title'), record.get('videoId'), record.get('description'));
+        if (record) {
+            this.getNavigationTree().setActiveNode(record);
+            this.getContent().loadVideo(record.get('title'), record.get('videoId'), record.get('description'));
+        }
     },
 
     showHome: function() {
         this.currentContent = name;
 
+        this.getNavigationTree().setActiveNode({ type: 'home' });
         this.getContent().loadHome();
     },
 

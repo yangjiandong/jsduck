@@ -74,7 +74,7 @@ Ext.application({
         }
 
         // setInterval(function(){
-        //     Ext.DomQuery.select('link')[0].href = "resources/css/app.css?" + Math.ceil(Math.random() * 100000000)
+        //     Ext.DomQuery.select('link')[0].href = "resources/css/touch.css?" + Math.ceil(Math.random() * 100000000)
         // }, 1000);
     },
 
