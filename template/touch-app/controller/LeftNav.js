@@ -75,10 +75,9 @@ Ext.define('TouchDocs.controller.LeftNav', {
             }));
         }
         else if (itemType === 'video') {
-            // TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
-            //     url: '!/video/' + record.get('className')
-            // }));
-            this.showVideo(record);
+            TouchDocs.app.getHistory().add(Ext.create('Ext.app.Action', {
+                url: '!/video/' + record.get('name')
+            }));
         }
 
         this.getMainContainer().setOpen(false);
@@ -176,7 +175,16 @@ Ext.define('TouchDocs.controller.LeftNav', {
         });
     },
 
-    showVideo: function(record) {
+    showVideo: function(name) {
+        var idx = Ext.getStore('NavigationTree').findBy(function(record, id) {
+            if (record.get) {
+                return record.get('type') === 'video' && record.get('name') === name;
+            } else {
+                return false;
+            }
+        });
+        var record = Ext.getStore('NavigationTree').getAt(idx);
+
         this.getContent().setTitle(record.get('title'));
         this.getContent().setHtml([
             '<div class="guide-container">',
