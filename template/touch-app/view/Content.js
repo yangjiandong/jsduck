@@ -76,8 +76,11 @@ Ext.define('TouchDocs.view.Content', {
      * Loads the initial welcome page.
      */
     loadHome: function() {
+        var welcomeElement = document.getElementById('welcome-content');
         this.setTitle("Welcome");
-        this.getAt(1).setHtml(document.getElementById('welcome-content').innerHTML);
+        if (welcomeElement) {
+            this.getAt(1).setHtml(welcomeElement.innerHTML);
+        }
         this.scrollToTop();
         this.setActiveItem(0);
     },

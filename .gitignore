@@ -2,6 +2,9 @@
 template/extjs
 template/touch
 template/resources/css
+template/touch-build
+template/touch-testing
+template/archive
 .sass-cache
 template-min/
 sdk-vars.rb

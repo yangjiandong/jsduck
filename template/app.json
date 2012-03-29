@@ -7,12 +7,11 @@
         },
         {
             "path": "touch-app.js",
-            "update": "delta",
             "bundle": true
         }
     ],
 
-    "url": "http://localhost/sencha/jsduck_out/touch-template.html",
+    "url": "touch-template.html",
 
     // "css": [
     //     {
@@ -23,7 +22,7 @@
 
     "appCache": {
         "cache": [
-            "index.html"
+            "touch-template.html"
         ],
         "network": [
             "*"
@@ -50,7 +49,8 @@
      */
     "buildPaths": {
         "production": "touch-build",
-        "testing": "touch-testing"
+        "testing": "touch-testing",
+        "package": "touch-package"
     },
 
     /**
