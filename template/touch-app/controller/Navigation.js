@@ -48,17 +48,17 @@ Ext.define('TouchDocs.controller.Navigation', {
 
         this.currentContent = name;
 
-        Ext.Viewport.setMasked({ xtype: 'loadmask' });
+        this.mask();
         Ext.data.JsonP.request({
             url: "guides/" + name + "/README.js",
             callbackName: name,
             success: function(json) {
                 this.getContent().loadGuide(json.title, json.guide);
-                Ext.Viewport.setMasked(false);
+                this.unmask();
                 callback && callback.call(scope);
             },
             failure: function() {
-                Ext.Viewport.setMasked(false);
+                this.unmask();
             },
             scope: this
         });
@@ -78,17 +78,17 @@ Ext.define('TouchDocs.controller.Navigation', {
 
         this.currentContent = name;
 
-        Ext.Viewport.setMasked({ xtype: 'loadmask' });
+        this.mask();
         Ext.data.JsonP.request({
             url: "output/" + name + ".js",
             callbackName: name.replace(/\./g, '_'),
             success: function(json) {
                 this.getContent().loadClass(json.name, json.html);
-                Ext.Viewport.setMasked(false);
+                this.unmask();
                 callback && callback.call(scope);
             },
             failure: function() {
-                Ext.Viewport.setMasked(false);
+                this.unmask();
             },
             scope: this
         });
@@ -124,5 +124,15 @@ Ext.define('TouchDocs.controller.Navigation', {
         this.currentContent = name;
 
         this.getContent().loadHome();
+    },
+
+    // helpers to mask/unmask the viewport
+
+    mask: function() {
+        Ext.Viewport.setMasked({ xtype: 'loadmask' });
+    },
+
+    unmask: function() {
+        Ext.Viewport.setMasked(false);
     }
 });
