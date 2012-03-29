@@ -120,16 +120,14 @@ Ext.define('TouchDocs.controller.Navigation', {
             memberName = split[2];
 
         this.showClass(cls, function() {
-            setTimeout(function() {
-                // Delete this element from the cache
-                delete Ext.Element.cache[split[1] + '-' + split[2]];
-                // Scroll to member
-                var memberEl = Ext.get(split[1] + '-' + split[2]);
-                if (memberEl) {
-                    me.getContent().getScrollable().getScroller().scrollTo(0, memberEl.dom.offsetTop - 5);
-                    memberEl.addCls('open');
-                }
-            }, 150);
+            // Delete this element from the cache
+            delete Ext.Element.cache[split[1] + '-' + split[2]];
+            // Scroll to member
+            var memberEl = Ext.get(split[1] + '-' + split[2]);
+            if (memberEl) {
+                me.getContent().getScrollable().getScroller().scrollTo(0, memberEl.dom.offsetTop - 5);
+                memberEl.addCls('open');
+            }
         });
     },
 
