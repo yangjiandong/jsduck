@@ -17,6 +17,10 @@ Ext.define('Docs.controller.Search', {
 
     refs: [
         {
+            ref: 'dropdown',
+            selector: 'searchdropdown'
+        },
+        {
             ref: 'field',
             selector: '#search-field'
         }
@@ -28,7 +32,7 @@ Ext.define('Docs.controller.Search', {
 
     init: function() {
         this.control({
-            '#search-dropdown': {
+            'searchdropdown': {
                 itemclick: function(dropdown, record) {
                     this.loadRecord(record);
                 },
@@ -114,10 +118,6 @@ Ext.define('Docs.controller.Search', {
                 }
             }
         });
-    },
-
-    getDropdown: function() {
-        return this.dropdown || (this.dropdown = Ext.getCmp('search-dropdown'));
     },
 
     // Cancels hiding of dropdown

@@ -20,7 +20,7 @@ Ext.define('TouchDocs.view.search.Dropdown', {
 
         items: [
             {
-                cls: 'searchDropdown',
+                cls: 'search-dropdown',
                 itemCls: 'item',
                 baseCls: 'l',
                 xtype: 'list',
