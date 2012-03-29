@@ -89,6 +89,7 @@ Ext.define("TouchDocs.view.SlideNav", {
 
         if (startX < 50 && !this.getOpen()) {
             this.canOpen = true;
+            this.getContainer().getScrollable().getScroller().setDisabled(true);
         } else {
             this.canOpen = false;
             this.onContainerTap(e);
@@ -149,7 +150,12 @@ Ext.define("TouchDocs.view.SlideNav", {
                     translateX: open ? this.getSideContainer().getWidth() : 0
                 }
             },
-            preserveEndState: true
+            onEnd: open ? null : function() {
+                // re-enable scrolling of main container once left sideContainer has closed
+                this.getContainer().getScrollable().getScroller().setDisabled(false);
+            },
+            preserveEndState: true,
+            scope: this
         });
     }
 });
