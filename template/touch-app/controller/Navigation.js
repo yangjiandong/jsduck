@@ -71,12 +71,7 @@ Ext.define('TouchDocs.controller.Navigation', {
     showGuideSection: function(name, section) {
         var me = this;
         this.showGuide(name, function() {
-            delete Ext.Element.cache[name + section];
-            // Scroll to member
-            var memberEl = Ext.get(name + section);
-            if (memberEl) {
-                me.getContent().getScrollable().getScroller().scrollTo(0, memberEl.dom.offsetTop - 10);
-            }
+            me.getContent().scrollToId(name + section);
         });
     },
 
@@ -116,14 +111,7 @@ Ext.define('TouchDocs.controller.Navigation', {
             memberName = split[2];
 
         this.showClass(cls, function() {
-            // Delete this element from the cache
-            delete Ext.Element.cache[split[1] + '-' + split[2]];
-            // Scroll to member
-            var memberEl = Ext.get(split[1] + '-' + split[2]);
-            if (memberEl) {
-                me.getContent().getScrollable().getScroller().scrollTo(0, memberEl.dom.offsetTop - 5);
-                memberEl.addCls('open');
-            }
+            me.getContent().scrollToId(split[1] + '-' + split[2], 'open');
         });
     },
 

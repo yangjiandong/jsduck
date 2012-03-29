@@ -120,6 +120,24 @@ Ext.define('TouchDocs.view.Content', {
      */
     scrollToTop: function(animate) {
         this.getScrollable().getScroller().scrollTo(0, 0, animate);
+    },
+
+    /**
+     * Scrolls content to element with specified ID.
+     *
+     * @param {String} id The id of the element.
+     * @param {String} [cls] CSS class to add to the element.
+     */
+    scrollToId: function(id, cls) {
+        // Delete this element from the cache
+        delete Ext.Element.cache[id];
+        // Scroll to the element
+        var el = Ext.get(id);
+        if (el) {
+            this.getScrollable().getScroller().scrollTo(0, el.dom.offsetTop - 10);
+            // add class when given
+            cls && el.addCls(cls);
+        }
     }
 
 });
