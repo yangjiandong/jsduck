@@ -14,7 +14,7 @@
 @include sencha-layout;
 // @include sencha-carousel;
 @include sencha-form;
-// @include sencha-msgbox;
+@include sencha-msgbox;
 @include sencha-loading-spinner;
 
 // Your custom code goes here...
@@ -210,4 +210,16 @@ p.screenshot {
   .meta {
     @include search-dropdown-meta; } }
 
-
+.x-list .x-list-item.example{
+  background: #fff;
+  .x-list-item-label {
+    img {
+      max-width: 50px;
+      float: left; }
+    .title {
+      margin-left: 65px;
+      font-weight: bold; }
+    .description {
+      margin-left: 65px;
+      color: #B2B2B2; }
+    min-height: 72px; } }

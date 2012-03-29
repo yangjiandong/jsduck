@@ -40,6 +40,9 @@ Ext.define('TouchDocs.controller.LeftNav', {
         else if (itemType === 'video') {
             this.addUrlToHistory('!/video/' + record.get('name'));
         }
+        else if (itemType === 'examples') {
+            this.addUrlToHistory('!/example');
+        }
 
         this.getMainContainer().setOpen(false);
     },

@@ -9,7 +9,7 @@ Ext.define('TouchDocs.view.Content', {
     xtype: 'content',
 
     config: {
-        id: 'center-container',
+        layout: 'card',
 
         items: [
             {
@@ -31,10 +31,24 @@ Ext.define('TouchDocs.view.Content', {
                         width: 170
                     }
                 ]
+            },
+            {
+                id: 'center-container',
+                scrollable: 'vertical',
+                xtype: 'container'
+            },
+            {
+                xtype: 'list',
+                itemTpl: [
+                    '<img src="{icon}" />',
+                    '<div class="title">{title}</div>',
+                    '<div class="description">{description}</div>'
+                ],
+                itemCls: 'example',
+                store: 'Examples',
+                grouped: true
             }
-        ],
-
-        scrollable: 'vertical'
+        ]
     },
 
     initialize: function() {
@@ -63,8 +77,9 @@ Ext.define('TouchDocs.view.Content', {
      */
     loadHome: function() {
         this.setTitle("Welcome");
-        this.setHtml(document.getElementById('welcome-content').innerHTML);
+        this.getAt(1).setHtml(document.getElementById('welcome-content').innerHTML);
         this.scrollToTop();
+        this.setActiveItem(0);
     },
 
     /**
@@ -74,8 +89,9 @@ Ext.define('TouchDocs.view.Content', {
      */
     loadClass: function(name, content) {
         this.setTitle(name);
-        this.setHtml('<div class="class-overview">' + content + '</div>');
+        this.getAt(1).setHtml('<div class="class-overview">' + content + '</div>');
         this.scrollToTop();
+        this.setActiveItem(0);
     },
 
     /**
@@ -85,8 +101,9 @@ Ext.define('TouchDocs.view.Content', {
      */
     loadGuide: function(name, content) {
         this.setTitle(name);
-        this.setHtml('<div class="guide-container">' + content + '</div>');
+        this.getAt(1).setHtml('<div class="guide-container">' + content + '</div>');
         this.scrollToTop();
+        this.setActiveItem(0);
     },
 
     /**
@@ -97,13 +114,22 @@ Ext.define('TouchDocs.view.Content', {
      */
     loadVideo: function(name, videoId, description) {
         this.setTitle(name);
-        this.setHtml([
+        this.getAt(1).setHtml([
             '<div class="guide-container">',
                 '<iframe src="http://player.vimeo.com/video/' + videoId + '" width="640" height="480" frameborder="0"></iframe>',
                 '<p>' + description + '</p>',
             '</div>'
         ].join(''));
+        this.setActiveItem(0);
         this.scrollToTop();
+    },
+
+    /**
+     * Loads the initial welcome page.
+     */
+    loadExamples: function() {
+        this.setTitle("Examples");
+        this.setActiveItem(1);
     },
 
     /**
@@ -119,7 +145,7 @@ Ext.define('TouchDocs.view.Content', {
      * @param {Boolean} [animate=false] True to animate the scrolling.
      */
     scrollToTop: function(animate) {
-        this.getScrollable().getScroller().scrollTo(0, 0, animate);
+        this.getAt(1).getScrollable().getScroller().scrollTo(0, 0, animate);
     },
 
     /**

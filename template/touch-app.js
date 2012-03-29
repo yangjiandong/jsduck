@@ -34,7 +34,8 @@ Ext.application({
 
     stores: [
         'NavigationTree',
-        'Search'
+        'Search',
+        'Examples'
     ],
 
     models: [
@@ -63,6 +64,7 @@ Ext.application({
         Ext.fly('appLoadingIndicator').destroy();
 
         Ext.getStore('NavigationTree').setNavigationData(Docs.data);
+        Ext.getStore('Examples').loadExamples();
 
         // Initialize the main view
         Ext.Viewport.add(Ext.create('TouchDocs.view.Main'));

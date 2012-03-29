@@ -26,7 +26,8 @@ Ext.define('TouchDocs.store.NavigationTree', {
                 { text: 'Home', type: 'home', leaf: true, iconCls: 'icon-sencha' },
                 { text: 'Classes', children: this.createClasses(data.classes), iconCls: 'icon-class' },
                 { text: 'Guides', children: this.createGuides(data.guides), iconCls: 'icon-guide' },
-                { text: 'Videos', children: this.createVideos(data.videos), iconCls: 'icon-video' }
+                { text: 'Videos', children: this.createVideos(data.videos), iconCls: 'icon-video' },
+                { text: 'Examples', type: 'examples', leaf: true, iconCls: 'icon-example' }
             ]
         });
     },

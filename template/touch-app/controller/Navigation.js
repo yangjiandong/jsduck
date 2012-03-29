@@ -32,12 +32,19 @@ Ext.define('TouchDocs.controller.Navigation', {
                 }
             },
             '!/video/:name': 'showVideo',
-            '!/home': 'showHome'
+            '!/home': 'showHome',
+            '!/example': 'showExamples'
         },
 
         refs: {
             content: 'content',
             navigationTree: 'leftNav'
+        },
+
+        control: {
+            'content list': {
+                itemtap: 'showExample'
+            }
         }
     },
 
@@ -141,10 +148,25 @@ Ext.define('TouchDocs.controller.Navigation', {
     },
 
     showHome: function() {
-        this.currentContent = name;
+        this.currentContent = 'home';
 
         this.getNavigationTree().setActiveNode({ type: 'home' });
         this.getContent().loadHome();
+    },
+
+    showExamples: function() {
+        this.currentContent = 'examples';
+
+        this.getNavigationTree().setActiveNode({ type: 'examples' });
+        this.getContent().loadExamples();
+    },
+
+    showExample: function(view, idx, target, record) {
+        Ext.Msg.confirm("Example", "This example will open in a new window", function(result) {
+            if (result === "yes") {
+                window.location = record.get('url');
+            }
+        });
     },
 
     // helpers to mask/unmask the viewport
