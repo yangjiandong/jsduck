@@ -518,4 +518,18 @@ task :gem => :sass do
   system "gem build jsduck.gemspec"
 end
 
+desc "Build JSDuck Touch app"
+task :touchapp do
+  load_sdk_vars
+  system "rm -rf template-min-touch"
+  system "cp -r template template-min-touch"
+  system "cp #{OUT_DIR}/touch-template.html template-min-touch/"
+  system "cd template-min-touch; sencha app build production"
+  system "cp -r template-min-touch/touch-build/app.json #{OUT_DIR}"
+  system "cp -r template-min-touch/touch-build/cache.manifest #{OUT_DIR}"
+  system "cp -r template-min-touch/touch-build/touch-app.js #{OUT_DIR}"
+  system "cp -r template-min-touch/touch-build/touch-template.html #{OUT_DIR}"
+  system "rm -rf #{OUT_DIR}/touch-app"
+end
+
 task :default => :spec
