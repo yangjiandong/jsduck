@@ -43,6 +43,7 @@ Ext.application({
     ],
 
     controllers: [
+        'Navigation',
         'LeftNav',
         'Search'
     ],
