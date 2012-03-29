@@ -57,7 +57,7 @@ Ext.define('TouchDocs.controller.Navigation', {
             success: function(json) {
                 this.getContent().setTitle(json.title);
                 this.getContent().setHtml('<div class="guide-container">' + json.guide + '</div>');
-                this.getContent().getScrollable().getScroller().scrollTo(0, 0);
+                this.getContent().scrollToTop();
                 Ext.Viewport.setMasked(false);
                 if (callback) {
                     callback();
@@ -99,6 +99,7 @@ Ext.define('TouchDocs.controller.Navigation', {
             success: function(json) {
                 this.getContent().setTitle(json.name);
                 this.getContent().setHtml('<div class="class-overview">' + json.html + '</div>');
+                this.getContent().scrollToTop();
                 Ext.Viewport.setMasked(false);
                 if (callback) {
                     callback();
@@ -149,9 +150,11 @@ Ext.define('TouchDocs.controller.Navigation', {
                 '<p>' + record.get('description') + '</p>',
             '</div>'
         ].join(''));
+        this.getContent().scrollToTop();
     },
 
     showHome: function() {
         this.getContent().loadWelcomePage();
+        this.getContent().scrollToTop();
     }
 });

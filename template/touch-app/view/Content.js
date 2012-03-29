@@ -54,7 +54,7 @@ Ext.define('TouchDocs.view.Content', {
         });
 
         this.down('toolbar').down('title').element.addListener('tap', function() {
-            this.getScrollable().getScroller().scrollTo(0, 0, true);
+            this.scrollToTop(true);
         }, this);
     },
 
@@ -72,6 +72,14 @@ Ext.define('TouchDocs.view.Content', {
      */
     setTitle: function(title) {
         this.down("toolbar").setTitle(title);
+    },
+
+    /**
+     * Scrolls content to top.
+     * @param {Boolean} [animate=false] True to animate the scrolling.
+     */
+    scrollToTop: function(animate) {
+        this.getScrollable().getScroller().scrollTo(0, 0, animate);
     }
 
 });
