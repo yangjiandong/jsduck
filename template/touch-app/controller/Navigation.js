@@ -134,6 +134,8 @@ Ext.define('TouchDocs.controller.Navigation', {
     },
 
     showVideo: function(name) {
+        this.currentContent = name;
+
         var idx = Ext.getStore('NavigationTree').findBy(function(record, id) {
             if (record.get) {
                 return record.get('type') === 'video' && record.get('name') === name;
@@ -154,6 +156,8 @@ Ext.define('TouchDocs.controller.Navigation', {
     },
 
     showHome: function() {
+        this.currentContent = name;
+
         this.getContent().loadWelcomePage();
         this.getContent().scrollToTop();
     }
