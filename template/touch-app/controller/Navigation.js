@@ -95,13 +95,17 @@ Ext.define('TouchDocs.controller.Navigation', {
     },
 
     showClassMember: function(name) {
-        var split = name.split('-'),
-            cls = split[0],
-            memberType = split[1],
-            memberName = split[2];
+        // The full member name consist of dash-separated parts
+        // (the static part is optional):
+        //
+        //    ClassName - (static - ) type - name
+        //
+        var split = name.split('-');
+        var cls = split.shift();
+        var member = split.join("-");
 
         this.showClass(cls, function() {
-            this.getContent().scrollToId(split[1] + '-' + split[2], 'open');
+            this.getContent().scrollToId(member, 'open');
         }, this);
     },
 
