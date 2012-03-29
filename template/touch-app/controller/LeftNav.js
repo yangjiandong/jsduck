@@ -93,7 +93,7 @@ Ext.define('TouchDocs.controller.LeftNav', {
 
         this.currentContent = name;
 
-        Ext.Viewport.setMasked({ xtype: 'loadmask' })
+        Ext.Viewport.setMasked({ xtype: 'loadmask' });
         Ext.data.JsonP.request({
             url: "guides/" + name + "/README.js",
             callbackName: name,
@@ -135,14 +135,14 @@ Ext.define('TouchDocs.controller.LeftNav', {
 
         this.currentContent = name;
 
-        Ext.Viewport.setMasked({ xtype: 'loadmask' })
+        Ext.Viewport.setMasked({ xtype: 'loadmask' });
         Ext.data.JsonP.request({
             url: "output/" + name + ".js",
             callbackName: name.replace(/\./g, '_'),
             success: function(json) {
                 this.getContent().setTitle(json.name);
                 this.getContent().setHtml('<div class="class-overview">' + json.html + '</div>');
-                Ext.Viewport.setMasked(false)
+                Ext.Viewport.setMasked(false);
                 if (callback) {
                     callback();
                 }
