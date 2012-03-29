@@ -55,9 +55,7 @@ Ext.define('TouchDocs.controller.Navigation', {
             url: "guides/" + name + "/README.js",
             callbackName: name,
             success: function(json) {
-                this.getContent().setTitle(json.title);
-                this.getContent().setHtml('<div class="guide-container">' + json.guide + '</div>');
-                this.getContent().scrollToTop();
+                this.getContent().loadGuide(json.title, json.guide);
                 Ext.Viewport.setMasked(false);
                 if (callback) {
                     callback();
@@ -97,9 +95,7 @@ Ext.define('TouchDocs.controller.Navigation', {
             url: "output/" + name + ".js",
             callbackName: name.replace(/\./g, '_'),
             success: function(json) {
-                this.getContent().setTitle(json.name);
-                this.getContent().setHtml('<div class="class-overview">' + json.html + '</div>');
-                this.getContent().scrollToTop();
+                this.getContent().loadClass(json.name, json.html);
                 Ext.Viewport.setMasked(false);
                 if (callback) {
                     callback();
@@ -143,20 +139,12 @@ Ext.define('TouchDocs.controller.Navigation', {
         });
         var record = Ext.getStore('NavigationTree').getAt(idx);
 
-        this.getContent().setTitle(record.get('title'));
-        this.getContent().setHtml([
-            '<div class="guide-container">',
-                '<iframe src="http://player.vimeo.com/video/' + record.get('videoId') + '" width="640" height="480" frameborder="0"></iframe>',
-                '<p>' + record.get('description') + '</p>',
-            '</div>'
-        ].join(''));
-        this.getContent().scrollToTop();
+        this.getContent().loadVideo(record.get('title'), record.get('videoId'), record.get('description'));
     },
 
     showHome: function() {
         this.currentContent = name;
 
-        this.getContent().loadWelcomePage();
-        this.getContent().scrollToTop();
+        this.getContent().loadHome();
     }
 });

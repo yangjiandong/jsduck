@@ -61,9 +61,49 @@ Ext.define('TouchDocs.view.Content', {
     /**
      * Loads the initial welcome page.
      */
-    loadWelcomePage: function() {
+    loadHome: function() {
         this.setTitle("Welcome");
         this.setHtml(document.getElementById('welcome-content').innerHTML);
+        this.scrollToTop();
+    },
+
+    /**
+     * Loads class documentation.
+     * @param {String} name Class name
+     * @param {String} content HTML documentation
+     */
+    loadClass: function(name, content) {
+        this.setTitle(name);
+        this.setHtml('<div class="class-overview">' + content + '</div>');
+        this.scrollToTop();
+    },
+
+    /**
+     * Loads guide.
+     * @param {String} name Guide name
+     * @param {String} content HTML documentation
+     */
+    loadGuide: function(name, content) {
+        this.setTitle(name);
+        this.setHtml('<div class="guide-container">' + content + '</div>');
+        this.scrollToTop();
+    },
+
+    /**
+     * Loads video.
+     * @param {String} name Video name
+     * @param {String} videoId Vimeo video ID.
+     * @param {String} description Video description
+     */
+    loadVideo: function(name, videoId, description) {
+        this.setTitle(name);
+        this.setHtml([
+            '<div class="guide-container">',
+                '<iframe src="http://player.vimeo.com/video/' + videoId + '" width="640" height="480" frameborder="0"></iframe>',
+                '<p>' + description + '</p>',
+            '</div>'
+        ].join(''));
+        this.scrollToTop();
     },
 
     /**
