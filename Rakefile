@@ -529,6 +529,7 @@ task :touchapp do
   system "cp -r template-min-touch/touch-build/cache.manifest #{OUT_DIR}"
   system "cp -r template-min-touch/touch-build/touch-app.js #{OUT_DIR}"
   system "cp -r template-min-touch/touch-build/touch-template.html #{OUT_DIR}"
+  system "cp -r template-min-touch/touch-build/touch/sencha-touch-jsduck.js #{OUT_DIR}/touch"
   system "rm -rf #{OUT_DIR}/touch-app"
 end
 

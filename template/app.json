@@ -3,7 +3,7 @@
     "name": "Docs",
     "js": [
         {
-            "path": "touch/sencha-touch-all.js"
+            "path": "touch/sencha-touch-jsduck.js"
         },
         {
             "path": "touch-app.js",
