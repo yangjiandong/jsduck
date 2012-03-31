@@ -106,6 +106,12 @@ module JsDuck
           s.scan(@example_annotation_re) =~ @example_annotation_re
           css_classes = ($1 || "").strip
           out += "<pre class='inline-example #{css_classes}'><code>"
+          example = s.scan_until(/<\/code><\/pre>/)
+          puts
+          ctx = @class_context == "" ? @doc_context[:filename] : @class_context
+          puts "@example in #{ctx}:"
+          puts example.sub(/<\/code><\/pre>/, '')
+          out += example
         elsif s.check(/<a\b/)
           # Increment number of open <a> tags.
           open_a_tags += 1
