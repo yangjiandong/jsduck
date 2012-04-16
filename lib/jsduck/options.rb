@@ -1,7 +1,7 @@
 require 'optparse'
 require 'jsduck/meta_tag_registry'
 require 'jsduck/logger'
-require 'jsduck/io'
+require 'jsduck/json_duck'
 
 module JsDuck
 
@@ -73,7 +73,7 @@ module JsDuck
       ]
       @meta_tag_paths = []
 
-      @version = "3.8.2"
+      @version = "3.9.0.pre"
 
       # Customizing output
       @title = "Sencha Docs - Ext JS"
@@ -349,7 +349,12 @@ module JsDuck
         opts.on('--config=PATH',
           "Loads config options from JSON file.", " ") do |path|
           path = canonical(path)
-          config = read_json_config(path)
+          if File.exists?(path)
+            config = read_json_config(path)
+          else
+            puts "Oh noes!  The config file #{path} doesn't exist."
+            exit(1)
+          end
           # treat paths inside JSON config relative to the location of
           # config file.  When done, switch back to current working dir.
           @working_dir = File.dirname(path)
@@ -447,7 +452,7 @@ module JsDuck
 
     # Extracts files of first build in jsb file
     def extract_jsb_files(jsb_file)
-      json = JSON.parse(JsDuck::IO.read(jsb_file))
+      json = JsonDuck::read(jsb_file)
       basedir = File.dirname(jsb_file)
 
       return json["builds"][0]["packages"].map do |package_id|

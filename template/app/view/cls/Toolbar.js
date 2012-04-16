@@ -11,8 +11,6 @@ Ext.define('Docs.view.cls.Toolbar', {
 
     dock: 'top',
     cls: 'member-links',
-    padding: '3 5',
-    style: 'border-width: 1px 1px 1px 1px !important;',
 
     /**
      * @cfg {Object} docClass
@@ -34,6 +32,11 @@ Ext.define('Docs.view.cls.Toolbar', {
              * @param {String} type Type of button that was clicked "cfg", "method", "event", etc
              */
             "menubuttonclick",
+            /**
+             * @event commentcountclick
+             * Fired when the comment count button clicked.
+             */
+            "commentcountclick",
             /**
              * @event filter
              * Fires when text typed to filter, or one of the hide-checkboxes clicked.
@@ -104,6 +107,7 @@ Ext.define('Docs.view.cls.Toolbar', {
                 hideTrigger: true,
                 emptyText: 'Filter class members',
                 enableKeyEvents: true,
+                width: 150,
                 listeners: {
                     keyup: function(cmp) {
                         this.fireEvent("filter", cmp.getValue(), this.getShowFlags());
@@ -125,6 +129,7 @@ Ext.define('Docs.view.cls.Toolbar', {
                 }
             }),
             { xtype: 'tbspacer', width: 10 },
+            this.commentCount = this.createCommentCount(),
             {
                 xtype: 'button',
                 text: 'Show',
@@ -237,6 +242,16 @@ Ext.define('Docs.view.cls.Toolbar', {
                         isSearch           && !re.test(m.get("label"))
                     );
                 });
+                // HACK!!!
+                // In Ext JS 4.1 filtering the stores causes the menus
+                // to become visible. But the visibility behaves badly
+                // - one has to call #show first or #hide won't have
+                // an effect.
+                var menu = this.memberButtons[type].menu;
+                if (menu && Ext.getVersion().version >= "4.1.0") {
+                    menu.show();
+                    menu.hide();
+                }
             }
         }, this);
     },
@@ -247,5 +262,39 @@ Ext.define('Docs.view.cls.Toolbar', {
      */
     getFilterValue: function() {
         return this.filterField.getValue();
+    },
+
+    createCommentCount: function() {
+        return Ext.create('Ext.container.Container', {
+            width: 24,
+            margin: '0 4 0 0',
+            cls: 'comment-btn',
+            html: '0',
+            hidden: true,
+            listeners: {
+                afterrender: function(cmp) {
+                    cmp.el.addListener('click', function() {
+                        this.fireEvent("commentcountclick");
+                    }, this);
+                },
+                scope: this
+            }
+        });
+    },
+
+    /**
+     * Makes the comment-count button visible.
+     */
+    showCommentCount: function() {
+        this.commentCount.show();
+    },
+
+    /**
+     * Updates the number shown on comment count button.
+     *
+     * @param {Number} n
+     */
+    setCommentCount: function(n) {
+        this.commentCount.update(""+n);
     }
 });
